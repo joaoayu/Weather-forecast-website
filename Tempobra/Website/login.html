@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesse sua conta</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="images/logo.png" alt="Tempobra Logo">
+            </div>
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="weather.html">Clima</a></li>
+                    <li><a href="news.html">Noticias</a></li>
+                    <li><a href="about.html">Sobre</a></li>
+                </ul>
+            </nav>
+            <div class="cta-buttons">
+                <a href="#" class="cta">Membro+</a>
+                <a href="login.html" class="cta">Login</a>
+            </div>
+        </div>      
+    </header>
+    <section class="hero-section">
+        <div class="content">
+            <div class="text-container">
+                <h1>Acesse sua conta</h1>
+                <p>A página de login é o seu portal de entrada para acessar todas as funcionalidades e dados exclusivos da nossa plataforma.</p>
+            </div>
+            <div class="login-container">
+                <form>
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" name="username" required>
+                    
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required>
+                    
+                    <button type="submit" class="cta-button">Entrar</button><br>
+                </form>
+            </div>
+        </div>
+    </section>
+    <Style>
+        .hero-section {
+    background-color: #dfeff7;
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinhamento ao topo */
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px; /* Ajuste conforme necessário */
+    gap: 20px; /* Adiciona espaço entre os elementos */
+}
+
+.text-container {
+    flex: 1; /* Faz o container de texto ocupar o espaço disponível */
+    max-width: 60%; /* Ajuste conforme necessário */
+}
+
+.login-container {
+    flex: 1; /* Faz o container de login ocupar o espaço disponível */
+    max-width: 40%; /* Ajuste conforme necessário */
+    padding: 20px;
+    background-color: #ffffff; /* Fundo branco para destacar o formulário */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve para destaque */
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container label {
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: #0c1e2d;
+}
+
+.login-container input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.login-container button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0073e6;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-container button:hover {
+    background-color: #005bb5;
+}
+
+    </Style>
+</body>
+</html>
