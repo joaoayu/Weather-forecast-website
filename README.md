@@ -1,2 +1,2 @@
-# Weather forecast website
-Project I developed to provide meteorological data and alerts for possible power outages in the region.
+# Tempobra: Weather forecast website
+### How do I use the application?
