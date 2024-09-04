@@ -1,5 +1,4 @@
 # Tempobra: Weather forecast website
-Solução de dados meteorológicos para o setor de energia.
 Tempobra is a weather dashboard that provides real-time weather data for cities across Brazil. The project integrates data from the OpenWeatherAPI and features an interactive chatbot for querying weather conditions. Additionally, the dashboard predicts energy outages based on weather data using machine learning models.
 
 ### Features
