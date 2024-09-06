@@ -339,11 +339,12 @@ fetchOtherCitiesWeather();
     margin-bottom: 10px;
     padding: 10px;
     background: #fff;
-    border-radius: 5px;
+    border-radius: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 #chatbot-input {
+    margin-left: 10px;
     width: calc(100% - 100px);
     padding: 10px;
     border: 1px solid #ccc;
@@ -487,7 +488,11 @@ fetchOtherCitiesWeather();
 
         .weather-icon {
             font-size: 40px;
-            color: #0073e6;
+            background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text; /* Para navegadores modernos */
+            text-fill-color: transparent; /* Para navegadores mais antigos */
             margin-bottom: 6px;
         }
 
@@ -515,7 +520,11 @@ fetchOtherCitiesWeather();
 
         .weather-detail i {
             font-size: 18px;
-            color: #0073e6;
+            background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text; /* Para navegadores modernos */
+            text-fill-color: transparent; /* Para navegadores mais antigos */
             margin-right: 6px;
         }
 
@@ -534,7 +543,11 @@ fetchOtherCitiesWeather();
 
         .other-city-icon {
             font-size: 32px;
-            color: #0073e6;
+            background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text; /* Para navegadores modernos */
+            text-fill-color: transparent; /* Para navegadores mais antigos */
             margin-right: 10px;
         }
 
