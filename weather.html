@@ -55,12 +55,62 @@
             <div id="weather-info" class="weather-info">
                 <p>Carregando dados...</p>
             </div>
+            <!-- Seção de Alertas -->   
+             
+<section class="alerts-section">
+    <div class="alerts-container">
+        <h2>Alertas Meteorológicos</h2>
+        <div id="alerts-info" class="alerts-info">
+            <p>Carregando alertas...</p>
+        </div>
+    </div>
+</section>
+
             <div id="other-cities" class="other-cities">
                 <p>Carregando outras cidades...</p>
             </div>
         </div>
     </section>
+<Script>
+    // Função para buscar alertas meteorológicos
+async function fetchAlerts(city = 'São Paulo') {
+    const apiKey = '6fb933c9f7d53edf247b458c25bdc881';
+    const alertsInfo = document.getElementById('alerts-info');
+    
+    alertsInfo.classList.add('fade-out');
 
+    setTimeout(async () => {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/alerts?q=${city}&appid=${apiKey}&lang=pt_br`);
+        const data = await response.json();
+
+        if (data.alerts && data.alerts.length > 0) {
+            alertsInfo.innerHTML = data.alerts.map(alert => `
+                <div class="alert-card">
+                    <h3>${alert.event}</h3>
+                    <p>${alert.description}</p>
+                </div>
+            `).join('');
+        } else {
+            alertsInfo.innerHTML = '<p>Não há alertas para a região selecionada.</p>';
+        }
+
+        alertsInfo.classList.remove('fade-out');
+    }, 500);
+}
+
+// Chame a função de fetchAlerts quando a cidade for alterada
+async function fetchWeather(city = 'São Paulo') {
+    // ... código existente ...
+
+    // Atualize também a chamada para alertas após buscar o clima
+    await fetchAlerts(city);
+}
+
+// Inicialize com a cidade padrão e os dados das outras cidades
+fetchWeather();
+fetchOtherCitiesWeather();
+
+</Script>
     <script>
 const weatherIcons = {
     '01d': 'wb_sunny',
@@ -308,6 +358,68 @@ fetchOtherCitiesWeather();
     </script>
 
     <style>
+        /* Estilo para a seção de alertas */
+.alerts-section {
+    padding: 20px 15px;
+    background-color: #ffffff00;
+    border-top: 2px solid #0073e6;
+    color: white;
+}
+
+.alerts-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+    background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para a área de alertas */
+.alerts-info {
+    margin: 0;
+    padding: 15px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+}
+
+/* Estilo para cada alerta */
+.alert-card {
+    background: linear-gradient(135deg, #bd313d, #de4f5e);
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.alert-card h3 {
+    margin-top: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #721c24;
+}
+
+.alert-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #555;
+}
+
+/* Adiciona um efeito de hover para alertas */
+.alert-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para a transição dos dados */
+.alerts-info.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
         .chatbot-section {
     position: fixed;
     bottom: 0;
