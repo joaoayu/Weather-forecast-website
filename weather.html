@@ -172,66 +172,65 @@ async function fetchWeather(city = 'São Paulo') {
 
             const iconName = weatherIcons[icon] || 'help_outline';
             weatherInfo.innerHTML = `
-                <div class="weather-card">
-                    <div class="weather-left">
-                        <i class="material-icons weather-icon">${iconName}</i>
-                        <div class="weather-location">${cityName}</div>
-                        <div class="weather-temp">${temp}°C</div>
-                        <div class="weather-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
-                    </div>
-                    <div class="weather-right">
-                        <div class="weather-columns">
-                            <div class="weather-column">
-                                <div class="weather-detail">
-                                    <i class="material-icons">arrow_upward</i>
-                                    <span>Máx: ${tempMax}°C</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">arrow_downward</i>
-                                    <span>Mín: ${tempMin}°C</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">thermostat</i>
-                                    <span>Sensação: ${feelsLike}°C</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">opacity</i>
-                                    <span>Umidade: ${humidity}%</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">air</i>
-                                    <span>Vento: ${windSpeed} m/s ${windDirection}</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">water_drop</i>
-                                    <span>Chance de chuva: ${Math.round(pop * 100)}%</span>
-                                </div>
-                            </div>
-                            <div class="weather-column">
-                                <div class="weather-detail">
-                                    <i class="material-icons">compress</i>
-                                    <span>Pressão: ${pressure} hPa</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">cloud</i>
-                                    <span>Nuvens: ${clouds}%</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">visibility</i>
-                                    <span>Visibilidade: ${visibility} km</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">wb_sunny</i>
-                                    <span>Índice UV: ${uvIndex}</span>
-                                </div>
-                                <div class="weather-detail">
-                                    <i class="material-icons">wb_twilight</i>
-                                    <span>Pôr do Sol: ${sunset}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="weather-card">
+    <div class="weather-left">
+        <div class="weather-icon-container">
+            <i class="material-icons weather-icon">${iconName}</i>
+        </div>
+        <div class="weather-location">${cityName}</div>
+        <div class="weather-temp">${temp}°C</div>
+        <div class="weather-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
+    </div>
+    <div class="weather-right">
+        <div class="weather-details">
+            <div class="weather-detail">
+                <i class="material-icons">arrow_upward</i>
+                <span>Máx: ${tempMax}°C</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">arrow_downward</i>
+                <span>Mín: ${tempMin}°C</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">thermostat</i>
+                <span>Sensação: ${feelsLike}°C</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">opacity</i>
+                <span>Umidade: ${humidity}%</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">air</i>
+                <span>Vento: ${windSpeed} m/s ${windDirection}</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">water_drop</i>
+                <span>Chance de chuva: ${Math.round(pop * 100)}%</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">compress</i>
+                <span>Pressão: ${pressure} hPa</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">cloud</i>
+                <span>Nuvens: ${clouds}%</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">visibility</i>
+                <span>Visibilidade: ${visibility} km</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">wb_sunny</i>
+                <span>Índice UV: ${uvIndex}</span>
+            </div>
+            <div class="weather-detail">
+                <i class="material-icons">wb_twilight</i>
+                <span>Pôr do Sol: ${sunset}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
             `;
 
             weatherInfo.classList.remove('fade-out');
@@ -296,14 +295,22 @@ async function searchCity() {
                 const iconName = weatherIcons[icon] || 'help_outline';
 
                 suggestions.innerHTML += `
-                    <div class="suggestion-item" onclick="fetchWeather('${cityName}')">
-                        <i class="material-icons suggestion-icon">${iconName}</i>
-                        <div class="suggestion-details">
-                            <div class="suggestion-name">${cityName}</div>
-                            <div class="suggestion-temp">${temp}°C</div>
-                            <div class="suggestion-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
-                        </div>
-                    </div>
+<div class="other-city-card-advanced">
+    <div class="other-city-header">
+        <div class="other-city-icon-container">
+            <i class="material-icons other-city-icon">${iconName}</i>
+        </div>
+        <div class="other-city-info">
+            <div class="other-city-name">${cityName}</div>
+            <div class="other-city-temp">${temp}°C</div>
+        </div>
+    </div>
+    <div class="other-city-body">
+        <div class="other-city-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
+        <button class="more-details-btn" onclick="fetchWeather('${cityName}')">Ver mais</button>
+    </div>
+</div>
+
                 `;
             });
         } else {
@@ -539,104 +546,93 @@ fetchOtherCitiesWeather();
             color: #555;
         }
 
-        .weather-info {
-            max-width: 950px;
-            width: 100%;
-        }
+    .weather-card {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
 
-        .other-cities {
-            width: 100%;
-            padding-top: 20px;
-        }
+.weather-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+}
 
-        .weather-card, .other-city-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-            margin-bottom: 10px;
-        }
+.weather-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+    text-align: center;
+}
 
-        .weather-card {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            width: 100%;
-            overflow: hidden;
-        }
+.weather-icon-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(0, 115, 230, 0.5), transparent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
 
-        .weather-left {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-right: 15px;
-        }
+.weather-icon {
+    font-size: 40px;
+    color: #0073e6;
+}
 
-        .weather-right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
+.weather-location {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
 
-        .weather-columns {
-            display: flex;
-            justify-content: space-between;
-        }
+.weather-temp {
+    font-size: 25px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
 
-        .weather-column {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
+.weather-desc {
+    font-size: 13px;
+    color: #7f8c8d;
+}
 
-        .weather-location {
-            font-size: 16px;
-            font-weight: bold;
-            color: #0c1e2d;
-            margin-bottom: 6px;
-        }
+.weather-right {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
 
-        .weather-icon {
-            font-size: 40px;
-            background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text; /* Para navegadores modernos */
-            text-fill-color: transparent; /* Para navegadores mais antigos */
-            margin-bottom: 6px;
-        }
+.weather-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
 
-        .weather-temp {
-            font-size: 28px;
-            font-weight: bold;
-            color: #0c1e2d;
-            margin-bottom: 6px;
-        }
+.weather-detail {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #34495e;
+    border-bottom: 1px solid #ecf0f1;
+    padding-bottom: 5px;
+}
 
-        .weather-desc {
-            font-size: 12px;
-            color: #555;
-            margin-bottom: 10px;
-            text-align: center;
-        }
+.weather-detail i {
+    font-size: 22px;
+    color: #0073e6;
+    margin-right: 10px;
+}
 
-        .weather-detail {
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            color: #333;
-            margin: 4px 0;
-        }
-
-        .weather-detail i {
-            font-size: 18px;
-            background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text; /* Para navegadores modernos */
-            text-fill-color: transparent; /* Para navegadores mais antigos */
-            margin-right: 6px;
-        }
 
         .other-city-card {
             display: flex;
