@@ -70,7 +70,7 @@
             <!-- Seção de Alertas Meteorológicos -->
             <section class="alerts-section">
                 <div class="alerts-container">
-                    <h2>Alertas Meteorológicos</h2>
+                    <h2>Alertas da Região</h2>
                     <div id="alerts-info" class="alerts-info">
                         <p>Carregando alertas...</p>
                     </div>
@@ -105,7 +105,7 @@ async function fetchAlerts(city = 'São Paulo') {
             `).join('');
         } else {
             // Caso não haja alertas, exibe uma mensagem padrão
-            alertsInfo.innerHTML = '<p>Não há alertas para a região selecionada.</p>';
+            alertsInfo.innerHTML = '<p>Fique tranquilo, não há alertas para a região selecionada!</p>';
         }
 
         alertsInfo.classList.remove('fade-out'); // Remove a classe de fade-out após a atualização
