@@ -169,9 +169,12 @@ async function fetchWeather(city = 'São Paulo') {
 
             const directions = ['Norte', 'Nordeste', 'Leste', 'Sudeste', 'Sul', 'Sudoeste', 'Oeste', 'Noroeste'];
             const windDirection = directions[Math.round(windDeg / 45) % 8];
-
+ // Adicionar dia da semana
+ const today = new Date();
+            const dayOfWeek = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(today);
             const iconName = weatherIcons[icon] || 'help_outline';
             weatherInfo.innerHTML = `
+            
 <div class="weather-card">
     <div class="weather-left">
         <div class="weather-icon-container">
@@ -182,6 +185,7 @@ async function fetchWeather(city = 'São Paulo') {
         <div class="weather-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
     </div>
     <div class="weather-right">
+                <div class="weather-day">Aproveite o dia, hoje é ${dayOfWeek}</div>
         <div class="weather-details">
             <div class="weather-detail">
                 <i class="material-icons">arrow_upward</i>
@@ -538,7 +542,7 @@ fetchOtherCitiesWeather();
             color: #555;
         }
 
-    .weather-card {
+        .weather-card {
     background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     border-radius: 15px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -602,6 +606,13 @@ fetchOtherCitiesWeather();
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+
+.weather-day {
+    font-size: 16px;
+    font-weight: 300;
+    color: #2c3e50;
+    margin-bottom: 15px;
 }
 
 .weather-details {
