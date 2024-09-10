@@ -203,7 +203,7 @@ async function fetchWeather(city = 'São Paulo') {
                         <div class="weather-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
                     </div>
                     <div class="weather-right">
-                        <div class="weather-day">Aproveite o dia, hoje é ${dayOfWeek}</div>
+                        <div class="weather-day">Aproveite o dia, hoje é ${dayOfWeek}.</div>
                         <div class="weather-details">
                             <div class="weather-detail">
                                 <i class="material-icons">arrow_upward</i>
@@ -372,10 +372,10 @@ async function getWeatherResponse(message) {
             const weather = data.weather[0].description;
             return `Em ${city}, a temperatura atual é ${temp}°C com ${weather}.`;
         } else {
-            return `Desculpe, não consegui encontrar informações para ${city}.`;
+            return `Me desculpe, eu não consegui encontrar informações para ${city}.`;
         }
     } catch (error) {
-        return 'Desculpe, ocorreu um erro ao buscar os dados meteorológicos.';
+        return 'Me desculpe, ocorreu um erro ao buscar os dados meteorológicos.';
     }
 }
 
