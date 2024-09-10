@@ -796,6 +796,41 @@ fetchOtherCitiesWeather();
     opacity: 0; /* Torna o elemento invisível */
     transform: translateY(-10px); /* Move o elemento para cima */
 }
+.weather-card, .other-city-card {
+    transition: all 0.4s ease; /* Adiciona uma transição suave para todos os estados */
+}
+
+.weather-card:hover, .other-city-card:hover {
+    transform: scale(1.02); /* Leve aumento ao passar o mouse */
+}
+
+@media (max-width: 768px) {
+    .weather-section, .other-city-card, .weather-card {
+        padding: 10px;
+        flex-direction: column;
+    }
+    
+    .weather-card, .other-city-card {
+        flex-direction: column;
+    }
+
+    .weather-left, .weather-right {
+        width: 100%;
+    }
+
+    .weather-icon-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .weather-icon {
+        font-size: 30px;
+    }
+}
+.more-details-btn:active {
+    background-color: #005bb5; /* Escurece o botão quando clicado */
+    transform: scale(0.98); /* Leve diminuição no clique */
+}
 
     </style>
 </body>
