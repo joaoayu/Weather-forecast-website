@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Define o charset para garantir a correta codificação de caracteres -->
     <meta charset="UTF-8">
+    <!-- Configura a viewport para garantir que o site seja responsivo e se ajuste a diferentes tamanhos de tela -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Inclui o arquivo CSS principal para estilização -->
     <link rel="stylesheet" href="style.css">
+    <!-- Inclui ícones do Material Icons, uma biblioteca popular de ícones -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Clima</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Cabeçalho do site contendo a navegação principal -->
     <header>
         <div class="navbar">
+            <!-- Logo do site -->
             <div class="logo">
                 <img src="./Images/logo.png" alt="Tempobra Logo">
             </div>
+            <!-- Barra de navegação com links para outras páginas -->
             <nav class="nav-links">
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
@@ -21,18 +27,21 @@
                     <li><a href="about.html">Sobre</a></li>
                 </ul>
             </nav>
+            <!-- Botões de chamada para ação, como "Membro+" e "Login" -->
             <div class="cta-buttons">
                 <a href="#" class="cta">Membro+</a>
                 <a href="login.html" class="cta">Login</a>
             </div>
         </div>      
     </header>
+    <!-- Seção hero do site com uma introdução principal -->
     <section class="hero-section">
         <div class="content">
             <h1>Dados meteorológicos</h1>
             <p>Este é o hub central para tomar decisões rápidas e informadas, minimizando riscos e otimizando suas operações com base em dados climáticos de alta precisão.</p>
         </div>
     </section>
+    <!-- Seção de chatbot -->
     <section class="chatbot-section">
         <div class="chatbot-container">
             <div class="chatbot-header">
@@ -42,46 +51,52 @@
                 <div class="message">Olá! Como posso ajudar você com o clima hoje?</div>
             </div>
             <input type="text" id="chatbot-input" placeholder="Digite sua pergunta..." />
+            <!-- Botão de envio do chatbot com estilo inline; considere movê-lo para o CSS para manter o código limpo -->
             <button onclick="sendMessage()" style="width: 80px; background: #0073e6; color: white; border: none; padding: 10px; border-radius: 0 5px 5px 0; cursor: pointer;">Enviar</button>
         </div>
     </section>
     <!-- Seção de Clima -->
     <section class="weather-section">
         <div class="weather-container">
+            <!-- Campo de pesquisa de cidade com sugestões dinâmicas -->
             <div class="search-container">
                 <input type="text" id="city-search" placeholder="Pesquise uma cidade..." oninput="searchCity()" />
                 <div id="suggestions" class="suggestions"></div>
             </div>
+            <!-- Informações meteorológicas -->
             <div id="weather-info" class="weather-info">
                 <p>Carregando dados...</p>
             </div>
-            <!-- Seção de Alertas -->
-<section class="alerts-section">
-    <div class="alerts-container">
-        <h2>Alertas Meteorológicos</h2>
-        <div id="alerts-info" class="alerts-info">
-            <p>Carregando alertas...</p>
-        </div>
-    </div>
-</section>
+            <!-- Seção de Alertas Meteorológicos -->
+            <section class="alerts-section">
+                <div class="alerts-container">
+                    <h2>Alertas Meteorológicos</h2>
+                    <div id="alerts-info" class="alerts-info">
+                        <p>Carregando alertas...</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Informações sobre outras cidades -->
             <div id="other-cities" class="other-cities">
                 <p>Carregando outras cidades...</p>
             </div>
         </div>
     </section>
-<Script>
-    // Função para buscar alertas meteorológicos
+<script>
+// Função para buscar alertas meteorológicos
 async function fetchAlerts(city = 'São Paulo') {
-    const apiKey = '6fb933c9f7d53edf247b458c25bdc881';
+    const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
     const alertsInfo = document.getElementById('alerts-info');
     
-    alertsInfo.classList.add('fade-out');
+    alertsInfo.classList.add('fade-out'); // Adiciona a classe de fade-out para transição
 
     setTimeout(async () => {
+        // Faz a requisição à API de alertas meteorológicos
         const response = await fetch(`https://api.openweathermap.org/data/2.5/alerts?q=${city}&appid=${apiKey}&lang=pt_br`);
         const data = await response.json();
 
         if (data.alerts && data.alerts.length > 0) {
+            // Se houver alertas, exibe-os
             alertsInfo.innerHTML = data.alerts.map(alert => `
                 <div class="alert-card">
                     <h3>${alert.event}</h3>
@@ -89,16 +104,17 @@ async function fetchAlerts(city = 'São Paulo') {
                 </div>
             `).join('');
         } else {
+            // Caso não haja alertas, exibe uma mensagem padrão
             alertsInfo.innerHTML = '<p>Não há alertas para a região selecionada.</p>';
         }
 
-        alertsInfo.classList.remove('fade-out');
+        alertsInfo.classList.remove('fade-out'); // Remove a classe de fade-out após a atualização
     }, 500);
 }
 
-// Chame a função de fetchAlerts quando a cidade for alterada
+// Atualize a chamada para alertas após buscar o clima
 async function fetchWeather(city = 'São Paulo') {
-    // ... código existente ...
+    // ... código existente para buscar o clima ...
 
     // Atualize também a chamada para alertas após buscar o clima
     await fetchAlerts(city);
@@ -107,9 +123,10 @@ async function fetchWeather(city = 'São Paulo') {
 // Inicialize com a cidade padrão e os dados das outras cidades
 fetchWeather();
 fetchOtherCitiesWeather();
-
 </Script>
-    <script>
+
+<script>
+// Mapeamento de ícones para diferentes condições meteorológicas
 const weatherIcons = {
     '01d': 'wb_sunny',
     '01n': 'nights_stay',
@@ -134,16 +151,18 @@ const weatherIcons = {
 
 // Função para buscar o clima
 async function fetchWeather(city = 'São Paulo') {
-    const apiKey = '6fb933c9f7d53edf247b458c25bdc881';
+    const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
     const weatherInfo = document.getElementById('weather-info');
 
-    weatherInfo.classList.add('fade-out');
+    weatherInfo.classList.add('fade-out'); // Adiciona a classe de fade-out para transição
 
     setTimeout(async () => {
+        // Faz a requisição à API de clima
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
         const data = await response.json();
 
         if (data.cod === 200) {
+            // Extrai os dados e atualiza o conteúdo da interface
             const temp = Math.round(data.main.temp);
             const feelsLike = Math.round(data.main.feels_like);
             const tempMax = Math.round(data.main.temp_max);
@@ -169,76 +188,75 @@ async function fetchWeather(city = 'São Paulo') {
 
             const directions = ['Norte', 'Nordeste', 'Leste', 'Sudeste', 'Sul', 'Sudoeste', 'Oeste', 'Noroeste'];
             const windDirection = directions[Math.round(windDeg / 45) % 8];
- // Adicionar dia da semana
- const today = new Date();
+            // Adicionar dia da semana
+            const today = new Date();
             const dayOfWeek = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(today);
             const iconName = weatherIcons[icon] || 'help_outline';
             weatherInfo.innerHTML = `
-            
-<div class="weather-card">
-    <div class="weather-left">
-        <div class="weather-icon-container">
-            <i class="material-icons weather-icon">${iconName}</i>
-        </div>
-        <div class="weather-location">${cityName}</div>
-        <div class="weather-temp">${temp}°C</div>
-        <div class="weather-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
-    </div>
-    <div class="weather-right">
-                <div class="weather-day">Aproveite o dia, hoje é ${dayOfWeek}</div>
-        <div class="weather-details">
-            <div class="weather-detail">
-                <i class="material-icons">arrow_upward</i>
-                <span>Máx: ${tempMax}°C</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">arrow_downward</i>
-                <span>Mín: ${tempMin}°C</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">thermostat</i>
-                <span>Sensação: ${feelsLike}°C</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">opacity</i>
-                <span>Umidade: ${humidity}%</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">air</i>
-                <span>Vento: ${windSpeed} m/s ${windDirection}</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">water_drop</i>
-                <span>Chance de chuva: ${Math.round(pop * 100)}%</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">compress</i>
-                <span>Pressão: ${pressure} hPa</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">cloud</i>
-                <span>Nuvens: ${clouds}%</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">visibility</i>
-                <span>Visibilidade: ${visibility} km</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">wb_sunny</i>
-                <span>Índice UV: ${uvIndex}</span>
-            </div>
-            <div class="weather-detail">
-                <i class="material-icons">wb_twilight</i>
-                <span>Pôr do Sol: ${sunset}</span>
-            </div>
-        </div>
-    </div>
-</div>
-
+                <div class="weather-card">
+                    <div class="weather-left">
+                        <div class="weather-icon-container">
+                            <i class="material-icons weather-icon">${iconName}</i>
+                        </div>
+                        <div class="weather-location">${cityName}</div>
+                        <div class="weather-temp">${temp}°C</div>
+                        <div class="weather-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
+                    </div>
+                    <div class="weather-right">
+                        <div class="weather-day">Aproveite o dia, hoje é ${dayOfWeek}</div>
+                        <div class="weather-details">
+                            <div class="weather-detail">
+                                <i class="material-icons">arrow_upward</i>
+                                <span>Máx: ${tempMax}°C</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">arrow_downward</i>
+                                <span>Mín: ${tempMin}°C</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">thermostat</i>
+                                <span>Sensação: ${feelsLike}°C</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">opacity</i>
+                                <span>Umidade: ${humidity}%</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">air</i>
+                                <span>Vento: ${windSpeed} m/s ${windDirection}</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">water_drop</i>
+                                <span>Chance de chuva: ${Math.round(pop * 100)}%</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">compress</i>
+                                <span>Pressão: ${pressure} hPa</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">cloud</i>
+                                <span>Nuvens: ${clouds}%</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">visibility</i>
+                                <span>Visibilidade: ${visibility} km</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">wb_sunny</i>
+                                <span>Índice UV: ${uvIndex}</span>
+                            </div>
+                            <div class="weather-detail">
+                                <i class="material-icons">wb_twilight</i>
+                                <span>Pôr do Sol: ${sunset}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             `;
 
-            weatherInfo.classList.remove('fade-out');
+            weatherInfo.classList.remove('fade-out'); // Remove a classe de fade-out após a atualização
         } else {
+            // Caso ocorra um erro, exibe uma mensagem padrão
             weatherInfo.innerHTML = `<p>Não foi possível carregar os dados climáticos.</p>`;
             weatherInfo.classList.remove('fade-out');
         }
@@ -247,16 +265,18 @@ async function fetchWeather(city = 'São Paulo') {
 
 // Função para buscar o clima de outras cidades
 async function fetchOtherCitiesWeather() {
-    const apiKey = '6fb933c9f7d53edf247b458c25bdc881';
+    const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
     const cities = ['Rio de Janeiro', 'Belo Horizonte', 'Curitiba', 'Porto Alegre', 'São Bernardo do Campo'];
     const otherCitiesContainer = document.getElementById('other-cities');
     otherCitiesContainer.innerHTML = '';
 
     for (const city of cities) {
+        // Faz a requisição à API para cada cidade
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
         const data = await response.json();
 
         if (data.cod === 200) {
+            // Extrai e exibe os dados da cidade
             const temp = Math.round(data.main.temp);
             const weather = data.weather[0].description;
             const cityName = data.name;
@@ -285,12 +305,14 @@ async function searchCity() {
     const searchInput = document.getElementById('city-search').value;
     const suggestions = document.getElementById('suggestions');
     if (searchInput.length > 2) {
-        const apiKey = '6fb933c9f7d53edf247b458c25bdc881';
+        const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
+        // Faz a requisição à API de sugestões de cidades
         const response = await fetch(`https://api.openweathermap.org/data/2.5/find?q=${searchInput}&appid=${apiKey}&units=metric&lang=pt_br`);
         const data = await response.json();
         suggestions.innerHTML = '';
         
         if (data.list && data.list.length > 0) {
+            // Exibe sugestões de cidades com base na pesquisa
             data.list.forEach(city => {
                 const temp = Math.round(city.main.temp);
                 const weather = city.weather[0].description;
@@ -310,9 +332,11 @@ async function searchCity() {
                 `;
             });
         } else {
+            // Mensagem padrão caso nenhuma cidade seja encontrada
             suggestions.innerHTML = '<p>Nenhuma cidade encontrada.</p>';
         }
     } else {
+        // Limpa sugestões se a pesquisa tiver menos de 3 caracteres
         suggestions.innerHTML = '';
     }
 }
@@ -327,6 +351,7 @@ async function sendMessage() {
     messagesContainer.innerHTML += `<div class="message">Você: ${message}</div>`;
     input.value = '';
 
+    // Obtém a resposta do chatbot e exibe
     const responseMessage = await getWeatherResponse(message);
     messagesContainer.innerHTML += `<div class="message">Temai: ${responseMessage}</div>`;
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -334,10 +359,11 @@ async function sendMessage() {
 
 // Função para obter resposta do chatbot
 async function getWeatherResponse(message) {
-    const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; 
+    const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
     const city = message.trim();
 
     try {
+        // Faz a requisição à API para obter a resposta do chatbot
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
         const data = await response.json();
 
@@ -356,374 +382,421 @@ async function getWeatherResponse(message) {
 // Inicializar os dados
 fetchWeather();
 fetchOtherCitiesWeather();
-    </script>
+</script>
 
     <style>
-        /* Estilo para a seção de alertas */
+       /* Estilo para a seção de alertas */
 .alerts-section {
-    padding: 20px 0px;
-    background-color: #ffffff00;
-    border-top: 2px solid #0073e6;
-    color: white;
+    padding: 20px 0px; /* Espaçamento superior e inferior para a seção de alertas */
+    background-color: #ffffff00; /* Fundo transparente para a seção */
+    border-top: 2px solid #0073e6; /* Borda superior azul para destacar a seção */
+    color: white; /* Cor do texto (não será visível devido ao fundo transparente) */
 }
 
+/* Contêiner para a área de alertas */
 .alerts-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 10px;
-    background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px; /* Largura máxima para manter o conteúdo centralizado */
+    margin: 0 auto; /* Centraliza o contêiner horizontalmente */
+    padding: 10px; /* Espaçamento interno */
+    background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff); /* Gradiente azul para o fundo */
+    border-radius: 12px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
-/* Estilo para a área de alertas */
+/* Área onde os alertas são exibidos */
 .alerts-info {
-    margin: 0;
-    padding: 15px;
-    font-family: Arial, sans-serif;
-    color: #ffffff;
+    margin: 0; /* Remove margens padrão */
+    padding: 15px; /* Espaçamento interno */
+    font-family: Arial, sans-serif; /* Fonte padrão */
+    color: #ffffff; /* Cor do texto */
 }
 
-/* Estilo para cada alerta */
+/* Estilo para cada alerta individual */
 .alert-card {
-    background: linear-gradient(135deg, #bd313d, #de4f5e);
-    border-radius: 8px;
-    border: 1px solid #f5c6cb;
-    padding: 15px;
-    margin-bottom: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: linear-gradient(135deg, #bd313d, #de4f5e); /* Gradiente vermelho para o fundo dos alertas */
+    border-radius: 8px; /* Bordas arredondadas para os cartões de alerta */
+    border: 1px solid #f5c6cb; /* Borda fina com cor mais clara */
+    padding: 15px; /* Espaçamento interno */
+    margin-bottom: 15px; /* Espaçamento entre os cartões */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave para efeitos de hover */
 }
 
+/* Título dos alertas */
 .alert-card h3 {
-    margin-top: 0;
-    font-size: 18px;
-    font-weight: bold;
-    color: #721c24;
+    margin-top: 0; /* Remove margem superior para alinhamento correto */
+    font-size: 18px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    color: #721c24; /* Cor do texto do título */
 }
 
+/* Descrição dos alertas */
 .alert-card p {
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #555;
+    margin: 0; /* Remove margens padrão */
+    font-size: 14px; /* Tamanho da fonte */
+    line-height: 1.5; /* Espaçamento entre linhas */
+    color: #555; /* Cor do texto da descrição */
 }
 
-/* Adiciona um efeito de hover para alertas */
+/* Efeito de hover para cartões de alerta */
 .alert-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px); /* Eleva o cartão ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Aumenta a sombra ao passar o mouse */
 }
 
-/* Estilo para a transição dos dados */
+/* Transição para fade-out */
 .alerts-info.fade-out {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0; /* Torna o elemento invisível */
+    transform: translateY(-10px); /* Move o elemento para cima */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transição suave */
 }
 
-        .chatbot-section {
-    position: fixed;
+/* Estilo da seção de chatbot */
+.chatbot-section {
+    position: fixed; /* Fixa o chatbot no canto inferior direito */
     bottom: 0;
     right: 0;
-    width: 300px;
-    max-height: 400px;
-    background: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    width: 300px; /* Largura do chatbot */
+    max-height: 400px; /* Altura máxima */
+    background: #f9f9f9; /* Fundo claro para o chatbot */
+    border: 1px solid #ccc; /* Borda cinza clara */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    z-index: 1000; /* Garantia de que o chatbot fica acima de outros elementos */
 }
 
+/* Cabeçalho do chatbot */
 .chatbot-header {
-    background: #0073e6;
-    color: white;
-    padding: 10px;
-    border-radius: 10px 10px 0 0;
-    text-align: center;
+    background: #0073e6; /* Fundo azul */
+    color: white; /* Cor do texto */
+    padding: 10px; /* Espaçamento interno */
+    border-radius: 10px 10px 0 0; /* Bordas arredondadas apenas no topo */
+    text-align: center; /* Alinhamento centralizado do texto */
 }
 
+/* Área de mensagens do chatbot */
 .chatbot-messages {
-    padding: 10px;
-    height: 300px;
-    overflow-y: auto;
+    padding: 10px; /* Espaçamento interno */
+    height: 300px; /* Altura fixa */
+    overflow-y: auto; /* Rolagem vertical quando necessário */
 }
 
+/* Mensagens do chatbot */
 .message {
-    margin-bottom: 10px;
-    padding: 10px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px; /* Espaçamento entre mensagens */
+    padding: 10px; /* Espaçamento interno */
+    background: #fff; /* Fundo branco */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
+/* Input de mensagem do chatbot */
 #chatbot-input {
-    margin-left: 10px;
-    width: calc(100% - 100px);
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
-}
-        .weather-section {
-            padding: 15px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .weather-container {
-            display: flex;
-            width: 100%;
-            max-width: 900px;
-            flex-direction: column;
-        }
-
-        .search-container {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        #city-search {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 15px;
-        }
-
-        .suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 50%;
-            background: white;
-            border-radius: 15px;
-            z-index: 10;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .suggestion-item {
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .suggestion-item:hover {
-            background: #f0f0f0;
-        }
-
-        .suggestion-icon {
-            font-size: 32px;
-            color: #0073e6;
-            margin-right: 10px;
-        }
-
-        .suggestion-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .suggestion-name {
-            font-size: 16px;
-            font-weight: bold;
-            color: #0c1e2d;
-        }
-
-        .suggestion-temp {
-            font-size: 20px;
-            font-weight: bold;
-            color: #0c1e2d;
-        }
-
-        .suggestion-desc {
-            font-size: 12px;
-            color: #555;
-        }
-
-        .weather-card {
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    border-radius: 15px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    margin-left: 10px; /* Espaçamento à esquerda */
+    width: calc(100% - 100px); /* Largura ajustada para o input */
+    padding: 10px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda cinza clara */
+    border-radius: 5px 0 0 5px; /* Bordas arredondadas apenas do lado esquerdo */
 }
 
+/* Seção de clima */
+.weather-section {
+    padding: 15px 10px; /* Espaçamento interno */
+    display: flex; /* Flexbox para layout */
+    flex-direction: column; /* Direção de coluna */
+    align-items: center; /* Alinhamento centralizado */
+}
+
+/* Contêiner do clima */
+.weather-container {
+    display: flex; /* Flexbox para layout */
+    width: 100%; /* Largura total */
+    max-width: 900px; /* Largura máxima */
+    flex-direction: column; /* Direção de coluna */
+}
+
+/* Contêiner de busca de cidade */
+.search-container {
+    margin-bottom: 20px; /* Espaçamento inferior */
+    position: relative; /* Necessário para posicionar sugestões */
+}
+
+/* Campo de busca da cidade */
+#city-search {
+    width: 100%; /* Largura total */
+    padding: 10px; /* Espaçamento interno */
+    font-size: 14px; /* Tamanho da fonte */
+    border: 1px solid #ccc; /* Borda cinza clara */
+    border-radius: 15px; /* Bordas arredondadas */
+}
+
+/* Sugestões de cidades */
+.suggestions {
+    position: absolute; /* Posiciona as sugestões sobre o campo de busca */
+    top: 100%; /* Abaixo do campo de busca */
+    left: 0;
+    width: 50%; /* Largura ajustada */
+    background: white; /* Fundo branco */
+    border-radius: 15px; /* Bordas arredondadas */
+    z-index: 10; /* Acima de outros elementos */
+    max-height: 200px; /* Altura máxima */
+    overflow-y: auto; /* Rolagem vertical */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+/* Item de sugestão */
+.suggestion-item {
+    padding: 10px; /* Espaçamento interno */
+    display: flex; /* Flexbox para layout */
+    align-items: center; /* Alinhamento centralizado */
+    cursor: pointer; /* Cursor de ponteiro para indicar interatividade */
+}
+
+/* Efeito de hover nas sugestões */
+.suggestion-item:hover {
+    background: #f0f0f0; /* Fundo mais claro ao passar o mouse */
+}
+
+/* Ícone das sugestões */
+.suggestion-icon {
+    font-size: 32px; /* Tamanho do ícone */
+    color: #0073e6; /* Cor azul */
+    margin-right: 10px; /* Espaçamento à direita */
+}
+
+/* Detalhes das sugestões */
+.suggestion-details {
+    display: flex; /* Flexbox para layout */
+    flex-direction: column; /* Direção de coluna */
+}
+
+/* Nome da cidade nas sugestões */
+.suggestion-name {
+    font-size: 16px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    color: #0c1e2d; /* Cor do texto */
+}
+
+/* Temperatura nas sugestões */
+.suggestion-temp {
+    font-size: 20px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    color: #0c1e2d; /* Cor do texto */
+}
+
+/* Descrição do clima nas sugestões */
+.suggestion-desc {
+    font-size: 12px; /* Tamanho da fonte */
+    color: #555; /* Cor do texto */
+}
+
+/* Cartão de clima */
+.weather-card {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Gradiente claro */
+    border-radius: 15px; /* Bordas arredondadas */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    padding: 20px; /* Espaçamento interno */
+    margin-bottom: 20px; /* Espaçamento inferior */
+    display: flex; /* Flexbox para layout */
+    align-items: center; /* Alinhamento centralizado */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transição suave para hover */
+}
+
+/* Efeito de hover no cartão de clima */
 .weather-card:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Aumenta a sombra ao passar o mouse */
+    transform: translateY(-5px); /* Eleva o cartão ao passar o mouse */
 }
 
+/* Lado esquerdo do cartão de clima */
 .weather-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 20px;
-    text-align: center;
+    display: flex; /* Flexbox para layout */
+    flex-direction: column; /* Direção de coluna */
+    align-items: center; /* Alinhamento centralizado */
+    margin-right: 20px; /* Espaçamento à direita */
+    text-align: center; /* Alinhamento centralizado do texto */
 }
 
+/* Contêiner do ícone do clima */
 .weather-icon-container {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(0, 115, 230, 0.5), transparent);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
+    position: relative; /* Necessário para posicionamento interno */
+    width: 100px; /* Largura fixa */
+    height: 100px; /* Altura fixa */
+    background: radial-gradient(circle, rgba(0, 115, 230, 0.5), transparent); /* Gradiente circular */
+    border-radius: 50%; /* Forma circular */
+    display: flex; /* Flexbox para alinhamento do ícone */
+    align-items: center; /* Alinhamento centralizado */
+    justify-content: center; /* Alinhamento centralizado */
+    margin-bottom: 10px; /* Espaçamento inferior */
 }
 
+/* Ícone do clima */
 .weather-icon {
-    font-size: 40px;
-    color: #0073e6;
+    font-size: 40px; /* Tamanho do ícone */
+    color: #0073e6; /* Cor azul */
 }
 
+/* Localização no cartão de clima */
 .weather-location {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 5px;
+    font-size: 18px; /* Tamanho da fonte */
+    font-weight: 600; /* Peso da fonte */
+    color: #2c3e50; /* Cor do texto */
+    margin-bottom: 5px; /* Espaçamento inferior */
 }
 
+/* Temperatura no cartão de clima */
 .weather-temp {
-    font-size: 25px;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 5px;
+    font-size: 25px; /* Tamanho da fonte */
+    font-weight: 700; /* Peso da fonte */
+    color: #2c3e50; /* Cor do texto */
+    margin-bottom: 5px; /* Espaçamento inferior */
 }
 
+/* Descrição do clima no cartão */
 .weather-desc {
-    font-size: 13px;
-    color: #7f8c8d;
+    font-size: 13px; /* Tamanho da fonte */
+    color: #7f8c8d; /* Cor do texto */
 }
 
+/* Lado direito do cartão de clima */
 .weather-right {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+    display: flex; /* Flexbox para layout */
+    flex-direction: column; /* Direção de coluna */
+    flex: 1; /* Preenche o espaço restante */
 }
 
+/* Dia da semana no cartão de clima */
 .weather-day {
-    font-size: 16px;
-    font-weight: 300;
-    color: #2c3e50;
-    margin-bottom: 15px;
+    font-size: 16px; /* Tamanho da fonte */
+    font-weight: 300; /* Peso da fonte */
+    color: #2c3e50; /* Cor do texto */
+    margin-bottom: 15px; /* Espaçamento inferior */
 }
 
+/* Detalhes do clima no cartão */
 .weather-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
+    display: grid; /* Layout em grid */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Colunas ajustáveis */
+    gap: 15px; /* Espaçamento entre os itens */
 }
 
+/* Detalhe individual do clima */
 .weather-detail {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #34495e;
-    border-bottom: 1px solid #ecf0f1;
-    padding-bottom: 5px;
+    display: flex; /* Flexbox para alinhamento */
+    align-items: center; /* Alinhamento centralizado */
+    font-size: 14px; /* Tamanho da fonte */
+    color: #34495e; /* Cor do texto */
+    border-bottom: 1px solid #ecf0f1; /* Linha inferior */
+    padding-bottom: 5px; /* Espaçamento inferior */
 }
 
+/* Ícone dos detalhes do clima */
 .weather-detail i {
-    font-size: 22px;
-    color: #0073e6;
-    margin-right: 10px;
+    font-size: 22px; /* Tamanho do ícone */
+    color: #0073e6; /* Cor azul */
+    margin-right: 10px; /* Espaçamento à direita */
 }
 
+/* Cartão de outra cidade */
+.other-city-card {
+    display: flex; /* Flexbox para layout */
+    justify-content: space-between; /* Espaço entre os itens */
+    align-items: center; /* Alinhamento centralizado */
+    width: 100%; /* Largura total */
+    margin-bottom: 10px; /* Espaçamento inferior */
+}
 
-        .other-city-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 10px;
-        }
+/* Informações de outra cidade */
+.other-city-info {
+    display: flex; /* Flexbox para layout */
+    align-items: center; /* Alinhamento centralizado */
+}
 
-        .other-city-info {
-            display: flex;
-            align-items: center;
-        }
+/* Ícone da cidade */
+.other-city-icon {
+    font-size: 32px; /* Tamanho do ícone */
+    background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff); /* Gradiente de texto */
+    -webkit-background-clip: text; /* Para navegadores Webkit */
+    -webkit-text-fill-color: transparent; /* Para navegadores Webkit */
+    background-clip: text; /* Para navegadores modernos */
+    text-fill-color: transparent; /* Para navegadores mais antigos */
+    margin-right: 10px; /* Espaçamento à direita */
+}
 
-        .other-city-icon {
-            font-size: 32px;
-            background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text; /* Para navegadores modernos */
-            text-fill-color: transparent; /* Para navegadores mais antigos */
-            margin-right: 10px;
-        }
+/* Detalhes de outra cidade */
+.other-city-details {
+    display: flex; /* Flexbox para layout */
+    flex-direction: column; /* Direção de coluna */
+}
 
-        .other-city-details {
-            display: flex;
-            flex-direction: column;
-        }
+/* Nome da cidade em outra cidade */
+.other-city-name {
+    font-size: 16px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    color: #0c1e2d; /* Cor do texto */
+    margin-bottom: 4px; /* Espaçamento inferior */
+}
 
-        .other-city-name {
-            font-size: 16px;
-            font-weight: bold;
-            color: #0c1e2d;
-            margin-bottom: 4px;
-        }
+/* Temperatura em outra cidade */
+.other-city-temp {
+    font-size: 20px; /* Tamanho da fonte */
+    font-weight: bold; /* Negrito */
+    color: #0c1e2d; /* Cor do texto */
+    margin-bottom: 4px; /* Espaçamento inferior */
+}
 
-        .other-city-temp {
-            font-size: 20px;
-            font-weight: bold;
-            color: #0c1e2d;
-            margin-bottom: 4px;
-        }
+/* Descrição do clima em outra cidade */
+.other-city-desc {
+    font-size: 12px; /* Tamanho da fonte */
+    color: #555; /* Cor do texto */
+}
 
-        .other-city-desc {
-            font-size: 12px;
-            color: #555;
-        }
+/* Botão para mais detalhes */
+.more-details-btn {
+    background-color: #0073e6; /* Fundo azul */
+    color: white; /* Cor do texto */
+    border: none; /* Remove borda padrão */
+    padding: 6px 12px; /* Espaçamento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de ponteiro */
+    font-size: 12px; /* Tamanho da fonte */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave */
+}
 
-        .more-details-btn {
-            background-color: #0073e6;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
+/* Efeito de hover no botão */
+.more-details-btn:hover {
+    background-color: #005bb5; /* Fundo azul mais escuro */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+}
 
-        .more-details-btn:hover {
-            background-color: #005bb5;
-            transform: scale(1.05);
-        }
+/* Estilo combinado para cartões de clima e outras cidades */
+.weather-card, .other-city-card {
+    background: white; /* Fundo branco */
+    border-radius: 20px; /* Bordas arredondadas */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    padding: 10px; /* Espaçamento interno */
+    margin-bottom: 10px; /* Espaçamento inferior */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transição suave */
+}
 
-        .weather-card, .other-city-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-            margin-bottom: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+/* Efeito de hover para cartões de clima e outras cidades */
+.weather-card:hover, .other-city-card:hover {
+    transform: translateY(-5px); /* Eleva o cartão ao passar o mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Aumenta a sombra */
+}
 
-        .weather-card:hover, .other-city-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+/* Estilo para a informação do clima com transições */
+.weather-info {
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transição suave */
+    opacity: 1; /* Visível por padrão */
+    transform: translateY(0); /* Sem deslocamento */
+}
 
-        .weather-info {
-            transition: opacity 0.5s ease, transform 0.5s ease;
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* Efeito de fade-out para a informação do clima */
+.weather-info.fade-out {
+    opacity: 0; /* Torna o elemento invisível */
+    transform: translateY(-10px); /* Move o elemento para cima */
+}
 
-        .weather-info.fade-out {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
     </style>
 </body>
 </html>
