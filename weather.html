@@ -295,22 +295,14 @@ async function searchCity() {
                 const iconName = weatherIcons[icon] || 'help_outline';
 
                 suggestions.innerHTML += `
-<div class="other-city-card-advanced">
-    <div class="other-city-header">
-        <div class="other-city-icon-container">
-            <i class="material-icons other-city-icon">${iconName}</i>
-        </div>
-        <div class="other-city-info">
-            <div class="other-city-name">${cityName}</div>
-            <div class="other-city-temp">${temp}°C</div>
-        </div>
-    </div>
-    <div class="other-city-body">
-        <div class="other-city-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
-        <button class="more-details-btn" onclick="fetchWeather('${cityName}')">Ver mais</button>
-    </div>
-</div>
-
+                    <div class="suggestion-item" onclick="fetchWeather('${cityName}')">
+                        <i class="material-icons suggestion-icon">${iconName}</i>
+                        <div class="suggestion-details">
+                            <div class="suggestion-name">${cityName}</div>
+                            <div class="suggestion-temp">${temp}°C</div>
+                            <div class="suggestion-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
+                        </div>
+                    </div>
                 `;
             });
         } else {
