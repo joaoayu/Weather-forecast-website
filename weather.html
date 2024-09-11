@@ -168,10 +168,53 @@ const weatherIcons = {
     'sunset': 'wb_twilight'
 };
 
+// Função para buscar sugestões de cidades
+async function searchCity() {
+    const searchInput = document.getElementById('city-search').value;
+    const suggestions = document.getElementById('suggestions');
+    if (searchInput.length > 2) {
+        const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
+        // Faz a requisição à API de sugestões de cidades
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/find?q=${searchInput}&appid=${apiKey}&units=metric&lang=pt_br`);
+        const data = await response.json();
+        suggestions.innerHTML = '';
+        
+        if (data.list && data.list.length > 0) {
+            // Exibe sugestões de cidades com base na pesquisa
+            data.list.forEach(city => {
+                const temp = Math.round(city.main.temp);
+                const weather = city.weather[0].description;
+                const cityName = city.name;
+                const icon = city.weather[0].icon;
+                const iconName = weatherIcons[icon] || 'help_outline';
+
+                suggestions.innerHTML += `
+                    <div class="suggestion-item" onclick="fetchWeather('${cityName}')">
+                        <i class="material-icons suggestion-icon">${iconName}</i>
+                        <div class="suggestion-details">
+                            <div class="suggestion-name">${cityName}</div>
+                            <div class="suggestion-temp">${temp}°C</div>
+                            <div class="suggestion-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else {
+            // Mensagem padrão caso nenhuma cidade seja encontrada
+            suggestions.innerHTML = '<p>Nenhuma cidade encontrada.</p>';
+        }
+    } else {
+        // Limpa sugestões se a pesquisa tiver menos de 3 caracteres
+        suggestions.innerHTML = '';
+    }
+}
+
 // Função para buscar o clima
 async function fetchWeather(city = 'São Paulo') {
     const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
     const weatherInfo = document.getElementById('weather-info');
+    const suggestions = document.getElementById('suggestions');
+    const searchInput = document.getElementById('city-search'); 
 
     weatherInfo.classList.add('fade-out'); // Adiciona a classe de fade-out para transição
 
@@ -274,6 +317,10 @@ async function fetchWeather(city = 'São Paulo') {
             `;
 
             weatherInfo.classList.remove('fade-out'); // Remove a classe de fade-out após a atualização
+
+            // Limpa as sugestões após a seleção de uma cidade
+            suggestions.innerHTML = '';
+            searchInput.value = ''; // Adicione esta linha para limpar o campo de entrada
         } else {
             // Caso ocorra um erro, exibe uma mensagem padrão
             weatherInfo.innerHTML = `<p>Não foi possível carregar os dados climáticos.</p>`;
@@ -281,6 +328,7 @@ async function fetchWeather(city = 'São Paulo') {
         }
     }, 500);
 }
+
 
 // Função para buscar o clima de outras cidades
 async function fetchOtherCitiesWeather() {
@@ -316,47 +364,6 @@ async function fetchOtherCitiesWeather() {
                 </div>
             `;
         }
-    }
-}
-
-// Função para buscar sugestões de cidades
-async function searchCity() {
-    const searchInput = document.getElementById('city-search').value;
-    const suggestions = document.getElementById('suggestions');
-    if (searchInput.length > 2) {
-        const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
-        // Faz a requisição à API de sugestões de cidades
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/find?q=${searchInput}&appid=${apiKey}&units=metric&lang=pt_br`);
-        const data = await response.json();
-        suggestions.innerHTML = '';
-        
-        if (data.list && data.list.length > 0) {
-            // Exibe sugestões de cidades com base na pesquisa
-            data.list.forEach(city => {
-                const temp = Math.round(city.main.temp);
-                const weather = city.weather[0].description;
-                const cityName = city.name;
-                const icon = city.weather[0].icon;
-                const iconName = weatherIcons[icon] || 'help_outline';
-
-                suggestions.innerHTML += `
-                    <div class="suggestion-item" onclick="fetchWeather('${cityName}')">
-                        <i class="material-icons suggestion-icon">${iconName}</i>
-                        <div class="suggestion-details">
-                            <div class="suggestion-name">${cityName}</div>
-                            <div class="suggestion-temp">${temp}°C</div>
-                            <div class="suggestion-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
-                        </div>
-                    </div>
-                `;
-            });
-        } else {
-            // Mensagem padrão caso nenhuma cidade seja encontrada
-            suggestions.innerHTML = '<p>Nenhuma cidade encontrada.</p>';
-        }
-    } else {
-        // Limpa sugestões se a pesquisa tiver menos de 3 caracteres
-        suggestions.innerHTML = '';
     }
 }
 
