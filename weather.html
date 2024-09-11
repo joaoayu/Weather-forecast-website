@@ -45,8 +45,11 @@
 <section class="chatbot-section minimizing" id="chatbot-section"> <!-- Inicia minimizado -->
     <div class="chatbot-container">
         <div class="chatbot-header">
+            <span id="info-icon" onclick="showInfo()" style="cursor: pointer; margin-right: 10px;">
+                <i class="material-icons">help_outline</i>
+            </span>
             <h2>Temai</h2>
-            <button id="toggle-btn" onclick="toggleChatbot()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer; position: absolute; right: 10px; top: 10px;">+</button>
+            <button id="toggle-btn" onclick="toggleChatbot()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">+</button>
         </div>
         <div class="chatbot-content" id="chatbot-content">
             <div class="chatbot-messages" id="chatbot-messages">
@@ -57,6 +60,16 @@
         </div>
     </div>
 </section>
+
+<!-- Modal com informações -->
+<div id="info-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeInfo()">&times;</span>
+        <h3>Como fazer perguntas ao Temai?</h3><br>
+        <p>Digite a cidade no campo abaixo e clique em "Enviar". Por exemplo, você pode digitar "São Paulo", "Campinas", "São Caetano do Sul".</p>
+    </div>
+</div>
+
 
     <!-- Seção de Clima -->
     <section class="weather-section">
@@ -377,10 +390,21 @@ function toggleChatbot() {
     }
 }
 
+// Mostrar o modal de informações
+function showInfo() {
+    document.getElementById('info-modal').style.display = 'block';
+}
+
+// Fechar o modal de informações
+function closeInfo() {
+    document.getElementById('info-modal').style.display = 'none';
+}
+
 // Iniciar o chatbot minimizado
 window.onload = function() {
     document.getElementById('chatbot-section').classList.add('minimizing');
 };
+
 
 // Função para obter resposta do chatbot
 async function getWeatherResponse(message) {
@@ -462,10 +486,58 @@ fetchOtherCitiesWeather();
     padding: 10px;
     border-radius: 10px 10px 0 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: center; /* Alinhamento vertical centralizado */
     position: relative;
 }
+
+/* Estilo do ícone de ajuda */
+#info-icon {
+    font-size: 24px; /* Tamanho do ícone */
+    color: white;
+    margin-right: 10px; /* Espaçamento entre o ícone e o título */
+    display: flex;
+    align-items: center; /* Alinha verticalmente o ícone */
+}
+
+/* Modal */
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Fundo escuro com opacidade */
+}
+
+/* Conteúdo do modal */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+
+/* Botão de fechar modal */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 
 /* Título "Temai" centralizado */
 .chatbot-header h2 {
@@ -476,12 +548,14 @@ fetchOtherCitiesWeather();
 
 /* Botão ao lado direito */
 #toggle-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%); /* Centraliza verticalmente o botão */
     font-size: 20px;
+    color: white;
+    background: none;
+    border: none;
     cursor: pointer;
+    margin-left: 10px; /* Espaçamento entre o título e o botão */
+    display: flex;
+    align-items: center; /* Alinha verticalmente o botão */
 }
 
 /* Área de mensagens do chatbot */
