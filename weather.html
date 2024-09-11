@@ -631,8 +631,11 @@ fetchOtherCitiesWeather();
 
 /* Ícone do clima */
 .weather-icon {
-    font-size: 40px; /* Tamanho do ícone */
-    color: #0073e6; /* Cor azul */
+    font-size: 54px; /* Tamanho do ícone */
+    background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff); /* Gradiente de texto */
+    -webkit-background-clip: text; /* Para navegadores Webkit */
+    -webkit-text-fill-color: transparent; /* Para navegadores Webkit */
+    background-clip: text; /* Para navegadores modernos */
 }
 
 /* Localização no cartão de clima */
@@ -721,7 +724,6 @@ fetchOtherCitiesWeather();
     -webkit-background-clip: text; /* Para navegadores Webkit */
     -webkit-text-fill-color: transparent; /* Para navegadores Webkit */
     background-clip: text; /* Para navegadores modernos */
-    text-fill-color: transparent; /* Para navegadores mais antigos */
     margin-right: 10px; /* Espaçamento à direita */
 }
 
