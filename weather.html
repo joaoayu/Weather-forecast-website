@@ -692,7 +692,10 @@ fetchOtherCitiesWeather();
 /* Ícone dos detalhes do clima */
 .weather-detail i {
     font-size: 22px; /* Tamanho do ícone */
-    color: #0073e6; /* Cor azul */
+    background: linear-gradient(135deg, #0033cc, #0073e6, #66ccff); /* Gradiente azul para o fundo */
+    -webkit-background-clip: text; /* Para navegadores Webkit */
+    -webkit-text-fill-color: transparent; /* Para navegadores Webkit */
+    background-clip: text; /* Para navegadores modernos */
     margin-right: 10px; /* Espaçamento à direita */
 }
 
