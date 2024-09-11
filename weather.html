@@ -41,20 +41,23 @@
             <p>Este é o hub central para tomar decisões rápidas e informadas, minimizando riscos e otimizando suas operações com base em dados climáticos de alta precisão.</p>
         </div>
     </section>
-    <!-- Seção de chatbot -->
-    <section class="chatbot-section">
-        <div class="chatbot-container">
-            <div class="chatbot-header">
-                <h2>Temai</h2>
-            </div>
+<!-- Seção de chatbot -->
+<section class="chatbot-section minimizing" id="chatbot-section"> <!-- Inicia minimizado -->
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <h2>Temai</h2>
+            <button id="toggle-btn" onclick="toggleChatbot()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer; position: absolute; right: 10px; top: 10px;">+</button>
+        </div>
+        <div class="chatbot-content" id="chatbot-content">
             <div class="chatbot-messages" id="chatbot-messages">
                 <div class="message">Olá! Como posso ajudar você com o clima hoje?</div>
             </div>
             <input type="text" id="chatbot-input" placeholder="Digite sua pergunta..." />
-            <!-- Botão de envio do chatbot com estilo inline; considere movê-lo para o CSS para manter o código limpo -->
             <button onclick="sendMessage()" style="width: 80px; background: #0073e6; color: white; border: none; padding: 10px; border-radius: 0 5px 5px 0; cursor: pointer;">Enviar</button>
         </div>
-    </section>
+    </div>
+</section>
+
     <!-- Seção de Clima -->
     <section class="weather-section">
         <div class="weather-container">
@@ -356,6 +359,28 @@ async function sendMessage() {
     messagesContainer.innerHTML += `<div class="message">Temai: ${responseMessage}</div>`;
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
+function toggleChatbot() {
+    const chatbotSection = document.getElementById('chatbot-section');
+    const toggleBtn = document.getElementById('toggle-btn');
+
+    // Verifica o estado atual
+    if (chatbotSection.classList.contains('maximizing')) {
+        // Minimizar
+        chatbotSection.classList.remove('maximizing');
+        chatbotSection.classList.add('minimizing');
+        toggleBtn.textContent = '+';
+    } else {
+        // Maximizar
+        chatbotSection.classList.remove('minimizing');
+        chatbotSection.classList.add('maximizing');
+        toggleBtn.textContent = '-';
+    }
+}
+
+// Iniciar o chatbot minimizado
+window.onload = function() {
+    document.getElementById('chatbot-section').classList.add('minimizing');
+};
 
 // Função para obter resposta do chatbot
 async function getWeatherResponse(message) {
@@ -385,6 +410,105 @@ fetchOtherCitiesWeather();
 </script>
 
     <style>
+       /* Seção de chatbot */
+.chatbot-section {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease; /* Animação de altura e fade */
+}
+
+/* Chat minimizado */
+.chatbot-section.minimizing {
+    height: 50px; /* Altura para o estado minimizado */
+    opacity: 1;
+}
+
+/* Chat maximizado */
+.chatbot-section.maximizing {
+    height: 400px; /* Altura completa ao maximizar */
+    opacity: 1;
+}
+
+/* Conteúdo do chatbot */
+.chatbot-content {
+    opacity: 1;
+    transition: opacity 0.3s ease; /* Suaviza a transição de opacidade */
+}
+
+/* Oculta o conteúdo ao minimizar */
+.chatbot-section.minimizing .chatbot-content {
+    opacity: 0;
+    pointer-events: none; /* Impede interação enquanto minimizado */
+}
+
+/* Mostra o conteúdo ao maximizar */
+.chatbot-section.maximizing .chatbot-content {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Cabeçalho do chatbot */
+.chatbot-header {
+    background: #0073e6;
+    color: white;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Título "Temai" centralizado */
+.chatbot-header h2 {
+    flex-grow: 1; /* Permite que o título ocupe o centro */
+    text-align: center;
+    margin: 0;
+}
+
+/* Botão ao lado direito */
+#toggle-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%); /* Centraliza verticalmente o botão */
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Área de mensagens do chatbot */
+.chatbot-messages {
+    padding: 10px; /* Espaçamento interno */
+    height: 300px; /* Altura fixa */
+    overflow-y: auto; /* Rolagem vertical quando necessário */
+}
+
+/* Mensagens do chatbot */
+.message {
+    margin-bottom: 10px; /* Espaçamento entre mensagens */
+    padding: 10px; /* Espaçamento interno */
+    background: #fff; /* Fundo branco */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Input de mensagem do chatbot */
+#chatbot-input {
+    margin-left: 10px; /* Espaçamento à esquerda */
+    width: calc(100% - 100px); /* Largura ajustada para o input */
+    padding: 10px; /* Espaçamento interno */
+    border: 1px solid #ccc; /* Borda cinza clara */
+    border-radius: 5px 0 0 5px; /* Bordas arredondadas apenas do lado esquerdo */
+}
+
        /* Estilo para a seção de alertas */
 .alerts-section {
     padding: 10px 0px; /* Espaçamento superior e inferior para a seção de alertas */
@@ -448,54 +572,6 @@ fetchOtherCitiesWeather();
     opacity: 0; /* Torna o elemento invisível */
     transform: translateY(-10px); /* Move o elemento para cima */
     transition: opacity 0.5s ease, transform 0.5s ease; /* Transição suave */
-}
-
-/* Estilo da seção de chatbot */
-.chatbot-section {
-    position: fixed; /* Fixa o chatbot no canto inferior direito */
-    bottom: 0;
-    right: 0;
-    width: 300px; /* Largura do chatbot */
-    max-height: 400px; /* Altura máxima */
-    background: #f9f9f9; /* Fundo claro para o chatbot */
-    border: 1px solid #ccc; /* Borda cinza clara */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
-    z-index: 1000; /* Garantia de que o chatbot fica acima de outros elementos */
-}
-
-/* Cabeçalho do chatbot */
-.chatbot-header {
-    background: #0073e6; /* Fundo azul */
-    color: white; /* Cor do texto */
-    padding: 10px; /* Espaçamento interno */
-    border-radius: 10px 10px 0 0; /* Bordas arredondadas apenas no topo */
-    text-align: center; /* Alinhamento centralizado do texto */
-}
-
-/* Área de mensagens do chatbot */
-.chatbot-messages {
-    padding: 10px; /* Espaçamento interno */
-    height: 300px; /* Altura fixa */
-    overflow-y: auto; /* Rolagem vertical quando necessário */
-}
-
-/* Mensagens do chatbot */
-.message {
-    margin-bottom: 10px; /* Espaçamento entre mensagens */
-    padding: 10px; /* Espaçamento interno */
-    background: #fff; /* Fundo branco */
-    border-radius: 10px; /* Bordas arredondadas */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-}
-
-/* Input de mensagem do chatbot */
-#chatbot-input {
-    margin-left: 10px; /* Espaçamento à esquerda */
-    width: calc(100% - 100px); /* Largura ajustada para o input */
-    padding: 10px; /* Espaçamento interno */
-    border: 1px solid #ccc; /* Borda cinza clara */
-    border-radius: 5px 0 0 5px; /* Bordas arredondadas apenas do lado esquerdo */
 }
 
 /* Seção de clima */
