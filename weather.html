@@ -124,7 +124,7 @@ async function fetchAlerts(city = 'São Paulo') {
             `).join('');
         } else {
             // Caso não haja alertas, exibe uma mensagem padrão e um botão para receber alertas via SMS
-            alertsInfo.innerHTML = '<p>Fique tranquilo, não há alertas para a região selecionada!</p>\n<br><button id="openForm" class="more-details-btn" style="width: 200px; font-size: 14px;">Receber alertas por SMS</button>';
+            alertsInfo.innerHTML = '<p>Fique tranquilo, não há alertas para a região selecionada!</p>\n<br><button id="openForm" class="more-details-btn" style="width: 200px; font-size: 14px;">Receber alertas via SMS</button>';
         }
 
         alertsInfo.classList.remove('fade-out'); // Remove a classe de fade-out após a atualização
