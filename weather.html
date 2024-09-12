@@ -124,7 +124,7 @@ async function fetchAlerts(city = 'São Paulo') {
             `).join('');
         } else {
             // Caso não haja alertas, exibe uma mensagem padrão e um botão para receber alertas via SMS
-            alertsInfo.innerHTML = '<p>Fique tranquilo, não há alertas para a região selecionada!</p>\n<br><button id="openForm" class="more-details-btn" style="width: 200px; font-size: 14px;">Receber alertas via SMS</button>';
+            alertsInfo.innerHTML = '<p>Fique tranquilo, não há alertas para a região selecionada!</p>\n<br><button id="openForm" class="more-details-btn" style="width: 200px; font-size: 14px;">Receber alertas via SMS</button> <button id="openForm" class="more-details-btn-warning" style="width: 200px; font-size: 14px;">Relatar queda de energia</button>';
         }
 
         alertsInfo.classList.remove('fade-out'); // Remove a classe de fade-out após a atualização
@@ -927,6 +927,24 @@ fetchOtherCitiesWeather();
     transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave */
 }
 
+/* Botão para mais detalhes */
+.more-details-btn-warning {
+    background-color: #cb2d09; /* Fundo azul */
+    color: white; /* Cor do texto */
+    border: none; /* Remove borda padrão */
+    padding: 6px 12px; /* Espaçamento interno */
+    border-radius: 10px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de ponteiro */
+    font-size: 12px; /* Tamanho da fonte */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transição suave */
+}
+
+/* Efeito de hover no botão */
+.more-details-btn-warning:hover {
+    background-color: #ba2807; /* Fundo azul mais escuro */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+}
+
 /* Efeito de hover no botão */
 .more-details-btn:hover {
     background-color: #005bb5; /* Fundo azul mais escuro */
@@ -970,6 +988,11 @@ fetchOtherCitiesWeather();
 }
 .more-details-btn:active {
     background-color: #005bb5; /* Escurece o botão quando clicado */
+    transform: scale(0.98); /* Leve diminuição no clique */
+}
+
+.more-details-btn-warning:active {
+    background-color: #ba2807; /* Escurece o botão quando clicado */
     transform: scale(0.98); /* Leve diminuição no clique */
 }
 
