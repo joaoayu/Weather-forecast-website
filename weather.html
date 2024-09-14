@@ -86,6 +86,46 @@
             <div id="weather-info" class="weather-info">
                 <p>Carregando dados...</p>
             </div>
+             <!-- Filtros Dinâmicos -->
+        <div id="filter-container" class="filter-container">
+            <div class="filter-group">
+                <input type="checkbox" id="filter-temperature" checked>
+                <label for="filter-temperature">Sensação</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-humidity" checked>
+                <label for="filter-humidity">Umid.</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-wind" checked>
+                <label for="filter-wind">Vento</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-pressure" checked>
+                <label for="filter-pressure">Chance de Chuva</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-pressao" checked>
+                <label for="filter-pressao">Pressão</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-nuvens" checked>
+                <label for="filter-nuvens">Nuvens</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-visibilidade" checked>
+                <label for="filter-visibilidade">Visibilidade</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-uv" checked>
+                <label for="filter-uv">UV</label>
+            </div>
+            <div class="filter-group">
+                <input type="checkbox" id="filter-sun" checked>
+                <label for="filter-sun">Pôr do Sol</label>
+            </div>
+            <button id="apply-filters" class="more-details-btn">Aplicar filtros</button>
+        </div>
             <!-- Seção de Alertas Meteorológicos -->
             <section class="alerts-section">
                 <div class="alerts-container">
@@ -143,7 +183,47 @@ async function fetchWeather(city = 'São Paulo') {
 fetchWeather();
 fetchOtherCitiesWeather();
 </Script>
-
+<script>
+    document.getElementById('apply-filters').addEventListener('click', function() {
+        const showTemperature = document.getElementById('filter-temperature').checked;
+        const showHumidity = document.getElementById('filter-humidity').checked;
+        const showWind = document.getElementById('filter-wind').checked;
+        const showPressure = document.getElementById('filter-pressure').checked;
+        const showUV = document.getElementById('filter-uv').checked;
+        const showSunset = document.getElementById('filter-sun').checked;
+        const showPressao = document.getElementById('filter-pressao').checked;
+        const showNuvens = document.getElementById('filter-nuvens').checked;
+        const showVisibilidade = document.getElementById('filter-visibilidade').checked;
+    
+        const weatherDetails = document.querySelectorAll('.weather-detail');
+    
+        // Mapeia os detalhes de clima com base no índice da ordem em que estão apresentados
+        //se atentar aos criterios abaixo
+        const detailMappings = {
+            temperature: weatherDetails[2], // Temperatura
+            humidity: weatherDetails[3],    // Umidade
+            wind: weatherDetails[4],        // Vento
+            pressure: weatherDetails[5],    // Chance de chuva
+            pressao: weatherDetails[6],      // Pressao
+            nuvens: weatherDetails[7],      // Nuvens
+            visibilidade: weatherDetails[8],  // Visibilidade
+            uv: weatherDetails[9],          // Índice UV
+            sunset: weatherDetails[10]      // Pôr do Sol
+        };
+    
+        // Atualiza a visibilidade dos detalhes com base nos filtros selecionados
+        detailMappings.temperature.style.display = showTemperature ? 'block' : 'none';
+        detailMappings.humidity.style.display = showHumidity ? 'block' : 'none';
+        detailMappings.wind.style.display = showWind ? 'block' : 'none';
+        detailMappings.pressure.style.display = showPressure ? 'block' : 'none';
+        detailMappings.uv.style.display = showUV ? 'block' : 'none';
+        detailMappings.sunset.style.display = showSunset ? 'block' : 'none';
+        detailMappings.nuvens.style.display = showNuvens ? 'block' : 'none';
+        detailMappings.pressao.style.display = showPressao ? 'block' : 'none';
+        detailMappings.visibilidade.style.display = showVisibilidade ? 'block' : 'none';
+    });
+    </script>
+    
 <script>
 // Mapeamento de ícones para diferentes condições meteorológicas
 const weatherIcons = {
@@ -444,6 +524,37 @@ fetchOtherCitiesWeather();
 </script>
 
     <style>
+
+/* Estilo para a caixa de filtros */
+.filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px; /* Espaço entre os filtros */
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ocupa a largura completa do contêiner principal */
+    max-width: 1200px; /* Ajusta a largura máxima conforme necessário */
+    margin-bottom: 20px;
+}
+
+/* Estilo para cada grupo de filtro */
+.filter-group {
+    display: flex;
+    align-items: center;
+}
+
+.filter-group input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.filter-group label {
+    font-size: 12px;
+    margin-right: 5px;
+}
+
        /* Seção de chatbot */
 .chatbot-section {
     position: fixed;
