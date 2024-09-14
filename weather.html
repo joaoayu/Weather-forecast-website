@@ -135,12 +135,95 @@
                     </div>
                 </div>
             </section>
+            <!-- Modal para relatar queda de energia -->
+<div id="outageReportModal" class="modal-outage">
+    <div class="modal-outage-content">
+      <span class="close-outage">&times;</span>
+      <h2>Relatar Queda de Energia</h2>
+      
+      <!-- Formulário dentro do modal -->
+      <form id="outageReportForm" style="margin-top: 10px;">
+        <label for="outageLocation">Localização</label>
+        <input type="text" id="outageLocation" name="outageLocation" required placeholder="Ex: São Paulo" value="">
+  
+        <label for="outageDateTime" style="margin-top: 10px;">Data e Hora da Queda</label>
+        <input type="datetime-local" id="outageDateTime" name="outageDateTime" required>
+  
+        <label for="outageDuration" style="margin-top: 10px;">Duração Estimada (em horas)</label>
+        <input type="number" id="outageDuration" name="outageDuration" required min="0.5" step="0.5" placeholder="Ex: 2">
+  
+        <label for="outageWeatherConditions" style="margin-top: 10px;">Condições Meteorológicas no Momento</label>
+        <select id="outageWeatherConditions" name="outageWeatherConditions">
+          <option value="nenhuma">Nenhuma</option>
+          <option value="chuva">Chuva</option>
+          <option value="vento">Vento Forte</option>
+          <option value="tempestade">Tempestade</option>
+          <option value="outro">Outro</option>
+        </select>
+  
+        <label for="outageImpact" style="margin-top: 10px;">Impacto da Queda (opcional)</label>
+        <textarea id="outageImpact" name="outageImpact" placeholder="Descreva o impacto da queda de energia"></textarea>
+  
+        <label for="outageContact" style="margin-top: 10px;">Contato (opcional)</label>
+        <input type="email" id="outageContact" name="outageContact" placeholder="Seu e-mail ou telefone">
+  
+        <button type="submit" class="btn-outage-primary">Enviar Relatório</button>
+      </form>
+  
+      <div id="outageFeedbackMessage"></div>
+    </div>
+  </div>
             <!-- Informações sobre outras cidades -->
             <div id="other-cities" class="other-cities">
                 <p>Carregando outras cidades...</p>
             </div>
         </div>
     </section>
+    <script>
+        // Captura o formulário
+const outageReportForm = document.getElementById('outageReportForm');
+
+outageReportForm.addEventListener('submit', async function(event) {
+  event.preventDefault(); // Previne o comportamento padrão do formulário
+
+  // Coleta os dados do formulário
+  const outageLocation = document.getElementById('outageLocation').value;
+  const outageDateTime = document.getElementById('outageDateTime').value;
+  const outageDuration = document.getElementById('outageDuration').value;
+  const outageWeatherConditions = document.getElementById('outageWeatherConditions').value;
+  const outageImpact = document.getElementById('outageImpact').value;
+  const outageContact = document.getElementById('outageContact').value;
+
+  // Dados a serem enviados
+  const reportData = {
+    location: outageLocation,
+    dateTime: outageDateTime,
+    duration: Number(outageDuration),
+    weatherConditions: outageWeatherConditions,
+    impact: outageImpact || '',
+    contact: outageContact || ''
+  };
+
+  try {
+    // Envia os dados via POST para a Cloud Function
+    const response = await fetch('https://us-central1-aerial-mantis-432802-i0.cloudfunctions.net/function-2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(reportData)
+    });
+
+    const result = await response.text();
+    console.log('Sucesso:', result);
+    document.getElementById('outageFeedbackMessage').textContent = 'Relatório enviado com sucesso!';
+  } catch (error) {
+    console.error('Erro ao enviar relatório:', error);
+    document.getElementById('outageFeedbackMessage').textContent = 'Erro ao enviar o relatório. Tente novamente.';
+  }
+});
+
+    </script>
 <script>
 // Função para buscar alertas meteorológicos
 async function fetchAlerts(city = 'São Paulo') {
@@ -164,7 +247,36 @@ async function fetchAlerts(city = 'São Paulo') {
             `).join('');
         } else {
             // Caso não haja alertas, exibe uma mensagem padrão e um botão para receber alertas via SMS
-            alertsInfo.innerHTML = '<p>Fique tranquilo, não há alertas para a região selecionada!</p>\n<br><button id="openForm" class="more-details-btn" style="width: 200px; font-size: 14px;">Receber alertas via SMS</button> <button id="openForm" class="more-details-btn-warning" style="width: 200px; font-size: 14px;">Relatar queda de energia</button>';
+            alertsInfo.innerHTML = `
+                <p>Fique tranquilo, não há alertas para a região selecionada!</p>
+                <br>
+                <button id="openForm" class="more-details-btn" style="width: 200px; font-size: 14px;">Receber alertas via SMS</button> 
+                <button id="reportOutageBtn" class="more-details-btn-warning" style="width: 200px; font-size: 14px;">Relatar queda de energia</button>
+            `;
+
+            // Adiciona event listener ao botão "Relatar queda de energia"
+            const reportOutageBtn = document.getElementById('reportOutageBtn');
+            if (reportOutageBtn) {
+                reportOutageBtn.addEventListener('click', function() {
+                    const outageModal = document.getElementById('outageReportModal');
+                    outageModal.style.display = 'block'; // Exibe o modal
+                });
+            }
+
+            // Adiciona event listener ao botão de fechar o modal
+            const closeModal = document.querySelector('.close-outage');
+            closeModal.addEventListener('click', function() {
+                const outageModal = document.getElementById('outageReportModal');
+                outageModal.style.display = 'none'; // Fecha o modal
+            });
+
+            // Fecha o modal ao clicar fora do conteúdo
+            window.onclick = function(event) {
+                const outageModal = document.getElementById('outageReportModal');
+                if (event.target === outageModal) {
+                    outageModal.style.display = 'none'; // Fecha o modal se clicar fora dele
+                }
+            };
         }
 
         alertsInfo.classList.remove('fade-out'); // Remove a classe de fade-out após a atualização
@@ -522,8 +634,131 @@ async function getWeatherResponse(message) {
 fetchWeather();
 fetchOtherCitiesWeather();
 </script>
+<Script>
+    // Obter os elementos
+var outageModal = document.getElementById("outageReportModal");
+var outageBtn = document.getElementById("openForm");
+var closeOutage = document.getElementsByClassName("close-outage")[0];
+var outageForm = document.getElementById("outageReportForm");
+var outageFeedbackMessage = document.getElementById("outageFeedbackMessage");
+
+// Abrir o modal ao clicar no botão "Relatar queda de energia"
+outageBtn.onclick = function() {
+  outageModal.style.display = "block";
+}
+
+// Fechar o modal ao clicar no "X"
+closeOutage.onclick = function() {
+  outageModal.style.display = "none";
+}
+
+// Fechar o modal ao clicar fora dele
+window.onclick = function(event) {
+  if (event.target == outageModal) {
+    outageModal.style.display = "none";
+  }
+}
+
+// Manipular envio do formulário
+outageForm.onsubmit = function(event) {
+  event.preventDefault(); // Evitar envio padrão
+
+  // Capturar dados do formulário
+  var formData = {
+    location: document.getElementById("outageLocation").value,
+    dateTime: document.getElementById("outageDateTime").value,
+    duration: document.getElementById("outageDuration").value,
+    weatherConditions: document.getElementById("outageWeatherConditions").value,
+    impact: document.getElementById("outageImpact").value,
+    contact: document.getElementById("outageContact").value
+  };
+
+  // Simular envio (substituir por requisição para sua API)
+  console.log("Enviando dados:", formData);
+
+  // Exibir mensagem de feedback
+  outageFeedbackMessage.textContent = "Relatório enviado com sucesso!";
+  
+  // Fechar modal após um tempo
+  setTimeout(() => {
+    outageModal.style.display = "none";
+  }, 2000);
+}
+
+</Script>
 
     <style>
+/* Estilos básicos do modal */
+.modal-outage {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-outage-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+}
+
+.close-outage {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-outage:hover,
+.close-outage:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Estilo do formulário */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input, select, textarea {
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+#outageFeedbackMessage {
+  margin-top: 10px;
+  color: green;
+  font-weight: bold;
+}
 
 /* Estilo para a caixa de filtros */
 .filter-container {
