@@ -569,11 +569,92 @@ async function sendMessage() {
     messagesContainer.innerHTML += `<div class="message">Você: ${message}</div>`;
     input.value = '';
 
-    // Obtém a resposta do chatbot e exibe
-    const responseMessage = await getWeatherResponse(message);
+    // Obtém a resposta do chatbot com RAG e exibe
+    const responseMessage = await getRAGResponse(message);
     messagesContainer.innerHTML += `<div class="message">Temai: ${responseMessage}</div>`;
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
+
+// Função para obter resposta avançada usando RAG
+async function getRAGResponse(question) {
+    try {
+        // Primeira etapa: Extrai entidades (cidade, data, tipo de pergunta)
+        const entities = await extractEntities(question);
+        if (!entities.city) {
+            return 'Por favor, mencione uma cidade na sua pergunta.';
+        }
+
+        const weatherData = await retrieveWeatherData(entities.city);
+
+        if (!weatherData || weatherData.cod !== 200) {
+            return 'Desculpe, não consegui encontrar os dados meteorológicos para a cidade mencionada.';
+        }
+
+        // Segunda etapa: Geração de resposta natural
+        const generatedResponse = await generateAdvancedResponse(question, weatherData, entities);
+        return generatedResponse;
+    } catch (error) {
+        console.error("Erro ao buscar ou gerar a resposta:", error);
+        return 'Me desculpe, ocorreu um erro ao buscar ou gerar a resposta.';
+    }
+}
+
+// Função para buscar dados meteorológicos
+async function retrieveWeatherData(city) {
+    const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API seguras
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Erro ao buscar dados meteorológicos:", error);
+        return null;
+    }
+}
+
+// Função para gerar uma resposta mais avançada e natural
+async function generateAdvancedResponse(question, weatherData, entities) {
+    const temp = Math.round(weatherData.main.temp);
+    const description = weatherData.weather[0].description;
+    const city = entities.city;
+    const date = entities.date || "hoje";
+
+    // Criação de respostas mais humanas e contextuais
+    if (question.includes("vai chover")) {
+        const chanceChuva = weatherData.weather.some(cond => cond.main.toLowerCase().includes("rain")) ? "Sim" : "Não";
+        return `Em ${city}, ${date}, a temperatura está em torno de ${temp}°C e a previsão indica: ${chanceChuva}, não há probabilidade de chuva.`;
+    }
+
+    if (question.includes("clima") || question.includes("tempo")) {
+        return `Atualmente, em ${city}, o clima está ${description} com temperatura de ${temp}°C. Alguma outra informação que você gostaria?`;
+    }
+
+    if (question.includes("calor") || question.includes("frio")) {
+        if (temp > 25) {
+            return `Está bastante quente em ${city}, com ${temp}°C. Não se esqueça de se manter hidratado!`;
+        } else if (temp < 15) {
+            return `Em ${city}, está fazendo frio com ${temp}°C. É uma boa ideia se agasalhar.`;
+        } else {
+            return `A temperatura em ${city} está agradável, em torno de ${temp}°C.`;
+        }
+    }
+
+    // Resposta padrão
+    return `Em ${city}, atualmente, o clima está ${description} e a temperatura é de ${temp}°C.`;
+}
+
+// Função para extrair entidades da pergunta (cidade, data, etc.)
+async function extractEntities(question) {
+    // Usa Regex para extrair cidade e data (pode ser aprimorado com NLP)
+    const cityMatch = question.match(/em\s([A-Za-z\u00C0-\u00FF\s]+)/i);
+    const city = cityMatch ? cityMatch[1].trim() : null;
+
+    const dateMatch = question.match(/\b(hoje|amanhã|depois de amanhã)\b/i);
+    const date = dateMatch ? dateMatch[1].toLowerCase() : "hoje";
+
+    return { city, date };
+}
+
 function toggleChatbot() {
     const chatbotSection = document.getElementById('chatbot-section');
     const toggleBtn = document.getElementById('toggle-btn');
@@ -606,29 +687,6 @@ function closeInfo() {
 window.onload = function() {
     document.getElementById('chatbot-section').classList.add('minimizing');
 };
-
-
-// Função para obter resposta do chatbot
-async function getWeatherResponse(message) {
-    const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
-    const city = message.trim();
-
-    try {
-        // Faz a requisição à API para obter a resposta do chatbot
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
-        const data = await response.json();
-
-        if (data.cod === 200) {
-            const temp = Math.round(data.main.temp);
-            const weather = data.weather[0].description;
-            return `Em ${city}, a temperatura atual é ${temp}°C com ${weather}.`;
-        } else {
-            return `Me desculpe, eu não consegui encontrar informações para ${city}.`;
-        }
-    } catch (error) {
-        return 'Me desculpe, ocorreu um erro ao buscar os dados meteorológicos.';
-    }
-}
 
 // Inicializar os dados
 fetchWeather();
