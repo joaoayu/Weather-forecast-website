@@ -360,6 +360,23 @@ const weatherIcons = {
     'sunset': 'wb_twilight'
 };
 
+// Função para buscar o estado de uma cidade usando a Google Maps Geocoding API
+async function fetchCityState(city) {
+    try {
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=${googleMapsApiKey}`);
+        const data = await response.json();
+        if (data.results.length > 0) {
+            const addressComponents = data.results[0].address_components;
+            const stateComponent = addressComponents.find(component => component.types.includes('administrative_area_level_1'));
+            return stateComponent ? stateComponent.short_name : '';
+        }
+        return '';
+    } catch (error) {
+        console.error('Erro ao buscar o estado da cidade:', error);
+        return '';
+    }
+}
+
 // Função para buscar sugestões de cidades
 async function searchCity() {
     const searchInput = document.getElementById('city-search').value;
@@ -373,24 +390,27 @@ async function searchCity() {
         
         if (data.list && data.list.length > 0) {
             // Exibe sugestões de cidades com base na pesquisa
-            data.list.forEach(city => {
+            for (const city of data.list) {
                 const temp = Math.round(city.main.temp);
                 const weather = city.weather[0].description;
                 const cityName = city.name;
                 const icon = city.weather[0].icon;
                 const iconName = weatherIcons[icon] || 'help_outline';
+                
+                // Obtém o estado da cidade
+                const state = await fetchCityState(cityName);
 
                 suggestions.innerHTML += `
                     <div class="suggestion-item" onclick="fetchWeather('${cityName}')">
                         <i class="material-icons suggestion-icon">${iconName}</i>
                         <div class="suggestion-details">
-                            <div class="suggestion-name">${cityName}</div>
+                            <div class="suggestion-name">${cityName}, ${state}</div>
                             <div class="suggestion-temp">${temp}°C</div>
                             <div class="suggestion-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
                         </div>
                     </div>
                 `;
-            });
+            }
         } else {
             // Mensagem padrão caso nenhuma cidade seja encontrada
             suggestions.innerHTML = '<p>Nenhuma cidade encontrada.</p>';
@@ -522,6 +542,20 @@ async function fetchWeather(city = 'São Paulo') {
 }
 
 
+const googleMapsApiKey = 'AIzaSyCqVmeQPS64Dukh7Db5lBN3wUXczNQRVEc'; // Substitua com sua chave de API
+
+// Função para buscar o estado de uma cidade usando a Google Maps Geocoding API
+async function fetchCityState(city) {
+    const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=${googleMapsApiKey}`);
+    const data = await response.json();
+    if (data.results.length > 0) {
+        const addressComponents = data.results[0].address_components;
+        const stateComponent = addressComponents.find(component => component.types.includes('administrative_area_level_1'));
+        return stateComponent ? stateComponent.short_name : '';
+    }
+    return '';
+}
+
 // Função para buscar o clima de outras cidades
 async function fetchOtherCitiesWeather() {
     const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Mantenha as chaves de API em variáveis de ambiente para segurança
@@ -531,15 +565,18 @@ async function fetchOtherCitiesWeather() {
 
     for (const city of cities) {
         // Faz a requisição à API para cada cidade
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
-        const data = await response.json();
+        const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
+        const weatherData = await weatherResponse.json();
 
-        if (data.cod === 200) {
+        if (weatherData.cod === 200) {
+            // Obtém o estado da cidade
+            const state = await fetchCityState(city);
+
             // Extrai e exibe os dados da cidade
-            const temp = Math.round(data.main.temp);
-            const weather = data.weather[0].description;
-            const cityName = data.name;
-            const icon = data.weather[0].icon;
+            const temp = Math.round(weatherData.main.temp);
+            const weather = weatherData.weather[0].description;
+            const cityName = weatherData.name;
+            const icon = weatherData.weather[0].icon;
             const iconName = weatherIcons[icon] || 'help_outline';
 
             otherCitiesContainer.innerHTML += `
@@ -547,7 +584,7 @@ async function fetchOtherCitiesWeather() {
                     <div class="other-city-info">
                         <i class="material-icons other-city-icon">${iconName}</i>
                         <div class="other-city-details">
-                            <div class="other-city-name">${cityName}</div>
+                            <div class="other-city-name">${cityName}, ${state}</div>
                             <div class="other-city-temp">${temp}°C</div>
                             <div class="other-city-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
                         </div>
@@ -558,6 +595,7 @@ async function fetchOtherCitiesWeather() {
         }
     }
 }
+
 
 // Função para enviar mensagem no chatbot
 async function sendMessage() {
@@ -621,8 +659,8 @@ async function generateAdvancedResponse(question, weatherData, entities) {
 
     // Criação de respostas mais humanas e contextuais
     if (question.includes("vai chover")) {
-        const chanceChuva = weatherData.weather.some(cond => cond.main.toLowerCase().includes("rain")) ? "Sim" : "Não";
-        return `Em ${city}, ${date}, a temperatura está em torno de ${temp}°C e a previsão indica: ${chanceChuva}, não há probabilidade de chuva.`;
+        const chanceChuva = weatherData.weather.some(cond => cond.main.toLowerCase().includes("rain")) ? "sim, irá chover" : "não irá chover";
+        return `Em ${city}, ${date}, a temperatura está em torno de ${temp}°C e a previsão indica que ${chanceChuva}.`;
     }
 
     if (question.includes("clima") || question.includes("tempo")) {
