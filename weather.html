@@ -42,7 +42,7 @@
         </div>
     </section>
 <!-- Seção de chatbot -->
-<section class="chatbot-section minimizing" id="chatbot-section"> <!-- Inicia minimizado -->
+<section class="chatbot-section minimizing" id="chatbot-section">
     <div class="chatbot-container">
         <div class="chatbot-header">
             <span id="info-icon" onclick="showInfo()" style="cursor: pointer; margin-right: 10px;">
@@ -60,6 +60,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- Modal com informações -->
 <div id="info-modal" class="modal">
@@ -597,7 +598,6 @@ async function fetchOtherCitiesWeather() {
 }
 
 
-// Função para enviar mensagem no chatbot
 async function sendMessage() {
     const input = document.getElementById('chatbot-input');
     const message = input.value.trim();
@@ -607,11 +607,27 @@ async function sendMessage() {
     messagesContainer.innerHTML += `<div class="message">Você: ${message}</div>`;
     input.value = '';
 
-    // Obtém a resposta do chatbot com RAG e exibe
+    // Exibe a animação de digitação
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'message';
+    typingIndicator.innerHTML = `<div class="typing-indicator">
+                                    <span></span><span></span><span></span>
+                                 </div>`;
+    messagesContainer.appendChild(typingIndicator);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // Simula um pequeno atraso antes da resposta do Temai (por exemplo, 2 segundos)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Remove a animação de digitação
+    typingIndicator.remove();
+
+    // Obtém a resposta do chatbot
     const responseMessage = await getRAGResponse(message);
     messagesContainer.innerHTML += `<div class="message">Temai: ${responseMessage}</div>`;
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
+
 
 // Função para obter resposta avançada usando RAG
 async function getRAGResponse(question) {
@@ -886,6 +902,47 @@ button[type="submit"]:hover {
 .filter-group label {
     font-size: 12px;
     margin-right: 5px;
+}
+/* Estilo para a animação de digitação */
+.typing-indicator {
+    display: inline-block;
+    width: 50px;
+    height: 20px;
+}
+
+.typing-indicator span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 2px;
+    background-color: #0073e6;
+    border-radius: 50%;
+    opacity: 0;
+    animation: typing 1.5s infinite;
+}
+
+.typing-indicator span:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes typing {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
        /* Seção de chatbot */
