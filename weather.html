@@ -135,6 +135,15 @@
                     </div>
                 </div>
             </section>
+            <!-- Modal de feedback após envio -->
+<div id="outageFeedbackModal" class="modal-outage-feedback">
+    <div class="modal-outage-feedback-content">
+        <span class="close-feedback">&times;</span>
+        <h3 id="feedbackTitle"></h3>
+        <p id="feedbackMessage"></p>
+    </div>
+</div>
+
 <!-- Modal para relatar queda de energia -->
 <div id="outageReportModal" class="modal-outage">
     <div class="modal-outage-content">
@@ -192,6 +201,12 @@
         // Captura o formulário
 const outageReportForm = document.getElementById('outageReportForm');
 
+// Captura os elementos do modal de feedback
+const outageFeedbackModal = document.getElementById('outageFeedbackModal');
+const feedbackTitle = document.getElementById('feedbackTitle');
+const feedbackMessage = document.getElementById('feedbackMessage');
+const closeFeedback = document.getElementsByClassName('close-feedback')[0];
+
 outageReportForm.addEventListener('submit', async function(event) {
   event.preventDefault(); // Previne o comportamento padrão do formulário
 
@@ -224,13 +239,33 @@ outageReportForm.addEventListener('submit', async function(event) {
     });
 
     const result = await response.text();
-    console.log('Sucesso:', result);
-    document.getElementById('outageFeedbackMessage').textContent = 'Relatório enviado com sucesso!';
+    feedbackTitle.textContent = 'Sucesso!';
+    feedbackMessage.textContent = 'Relatório enviado com sucesso!';
+    openFeedbackModal();
   } catch (error) {
-    console.error('Erro ao enviar relatório:', error);
-    document.getElementById('outageFeedbackMessage').textContent = 'Erro ao enviar o relatório. Tente novamente.';
+    feedbackTitle.textContent = 'Erro!';
+    feedbackMessage.textContent = 'Erro ao enviar o relatório. Tente novamente.';
+    openFeedbackModal();
   }
 });
+
+// Função para abrir o modal de feedback
+function openFeedbackModal() {
+  outageFeedbackModal.style.display = 'block';
+}
+
+// Fecha o modal ao clicar no "X"
+closeFeedback.onclick = function() {
+  outageFeedbackModal.style.display = 'none';
+}
+
+// Fecha o modal ao clicar fora da área de conteúdo
+window.onclick = function(event) {
+  if (event.target == outageFeedbackModal) {
+    outageFeedbackModal.style.display = 'none';
+  }
+}
+
 
     </script>
 <script>
@@ -910,6 +945,55 @@ outageForm.onsubmit = function(event) {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Modal de feedback */
+.modal-outage-feedback {
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; 
+  background-color: rgba(0, 0, 0, 0.4); 
+  animation: fadeIn 0.5s;
+}
+
+.modal-outage-feedback-content {
+  background-color: #fefefe;
+  margin: 15% auto; 
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; 
+  max-width: 500px;
+  text-align: center;
+  animation: slideIn 0.5s;
+}
+
+.close-feedback {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-feedback:hover,
+.close-feedback:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Botão de Fechar */
