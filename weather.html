@@ -1395,6 +1395,7 @@ button[type="submit"]:active {
     display: flex; /* Flexbox para layout */
     align-items: center; /* Alinhamento centralizado */
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transição suave para hover */
+    flex-wrap: wrap; /* Permite que os itens se movam para a próxima linha se necessário */
 }
 
 /* Efeito de hover no cartão de clima */
@@ -1410,6 +1411,7 @@ button[type="submit"]:active {
     align-items: center; /* Alinhamento centralizado */
     margin-right: 20px; /* Espaçamento à direita */
     text-align: center; /* Alinhamento centralizado do texto */
+    flex: 1; /* Permite que a seção ocupe o espaço restante */
 }
 
 /* Contêiner do ícone do clima */
@@ -1460,7 +1462,8 @@ button[type="submit"]:active {
 .weather-right {
     display: flex; /* Flexbox para layout */
     flex-direction: column; /* Direção de coluna */
-    flex: 1; /* Preenche o espaço restante */
+    flex: 2; /* Permite que a seção ocupe o dobro do espaço comparado ao lado esquerdo */
+    padding-left: 20px; /* Espaçamento à esquerda */
 }
 
 /* Dia da semana no cartão de clima */
@@ -1498,6 +1501,23 @@ button[type="submit"]:active {
     background-clip: text; /* Para navegadores modernos */
     margin-right: 10px; /* Espaçamento à direita */
 }
+
+/* Media Query para dispositivos móveis */
+@media (max-width: 768px) {
+    .weather-card {
+        flex-direction: column; /* Alinha os itens em coluna para telas menores */
+    }
+
+    .weather-left {
+        margin-right: 0; /* Remove o espaçamento à direita */
+        margin-bottom: 20px; /* Adiciona espaçamento inferior */
+    }
+
+    .weather-right {
+        padding-left: 0; /* Remove o padding à esquerda */
+    }
+}
+
 
 /* Cartão de outra cidade */
 .other-city-card {
