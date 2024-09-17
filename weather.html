@@ -135,44 +135,53 @@
                     </div>
                 </div>
             </section>
-            <!-- Modal para relatar queda de energia -->
+<!-- Modal para relatar queda de energia -->
 <div id="outageReportModal" class="modal-outage">
     <div class="modal-outage-content">
-      <span class="close-outage">&times;</span>
-      <h2>Relatar Queda de Energia</h2>
-      
-      <!-- Formulário dentro do modal -->
-      <form id="outageReportForm" style="margin-top: 10px;">
-        <label for="outageLocation">Localização</label>
-        <input type="text" id="outageLocation" name="outageLocation" required placeholder="Ex: São Paulo" value="">
+        <span class="close-outage">&times;</span>
+        <h2>Relatar Queda de Energia</h2>
+        
+        <!-- Formulário dentro do modal -->
+        <form id="outageReportForm" style="margin-top: 10px;">
+            <label for="outageLocation">Localização</label>
+            <input type="text" id="outageLocation" name="outageLocation" required placeholder="Ex: São Paulo" value="">
   
-        <label for="outageDateTime" style="margin-top: 10px;">Data e Hora da Queda</label>
-        <input type="datetime-local" id="outageDateTime" name="outageDateTime" required>
+            <label for="outageDateTime" style="margin-top: 10px;">Data e Hora da Queda</label>
+            <input type="datetime-local" id="outageDateTime" name="outageDateTime" required>
   
-        <label for="outageDuration" style="margin-top: 10px;">Duração Estimada (em horas)</label>
-        <input type="number" id="outageDuration" name="outageDuration" required min="0.5" step="0.5" placeholder="Ex: 2">
+            <label for="outageDuration" style="margin-top: 10px;">Duração Estimada (em horas)</label>
+            <input type="number" id="outageDuration" name="outageDuration" required min="0.5" step="0.5" placeholder="Ex: 2">
   
-        <label for="outageWeatherConditions" style="margin-top: 10px;">Condições Meteorológicas no Momento</label>
-        <select id="outageWeatherConditions" name="outageWeatherConditions">
-          <option value="nenhuma">Nenhuma</option>
-          <option value="chuva">Chuva</option>
-          <option value="vento">Vento Forte</option>
-          <option value="tempestade">Tempestade</option>
-          <option value="outro">Outro</option>
-        </select>
+            <label for="outageWeatherConditions" style="margin-top: 10px;">Condições Meteorológicas no Momento</label>
+            <select id="outageWeatherConditions" name="outageWeatherConditions">
+                <option value="nenhuma">Nenhuma</option>
+                <option value="chuva">Chuva</option>
+                <option value="vento">Vento Forte</option>
+                <option value="tempestade">Tempestade</option>
+                <option value="outro">Outro</option>
+            </select>
   
-        <label for="outageImpact" style="margin-top: 10px;">Impacto da Queda (opcional)</label>
-        <textarea id="outageImpact" name="outageImpact" placeholder="Descreva o impacto da queda de energia"></textarea>
+            <label for="outageImpact" style="margin-top: 10px;">Impacto da Queda (opcional)</label>
+            <textarea id="outageImpact" name="outageImpact" placeholder="Descreva o impacto da queda de energia"></textarea>
   
-        <label for="outageContact" style="margin-top: 10px;">Contato (opcional)</label>
-        <input type="email" id="outageContact" name="outageContact" placeholder="Seu e-mail ou telefone">
+            <label for="outageContact" style="margin-top: 10px;">Contato (opcional)</label>
+            <input type="email" id="outageContact" name="outageContact" placeholder="Seu e-mail ou telefone">
+
+            <!-- Termo de Consentimento -->
+            <div style="margin-top: 10px;">
+                <input type="checkbox" id="consent" name="consent" required>
+                <label for="consent">
+                    Eu concordo com os <a href="/termos-de-servico" target="_blank">termos de serviço</a> e <a href="/politica-de-privacidade" target="_blank">política de privacidade</a>.
+                </label>
+            </div>
   
-        <button type="submit" class="btn-outage-primary">Enviar Relatório</button>
-      </form>
+            <button type="submit" class="btn-outage-primary">Enviar Relatório</button>
+        </form>
   
-      <div id="outageFeedbackMessage"></div>
+        <div id="outageFeedbackMessage"></div>
     </div>
-  </div>
+</div>
+
             <!-- Informações sobre outras cidades -->
             <div id="other-cities" class="other-cities">
                 <p>Carregando outras cidades...</p>
