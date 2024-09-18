@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tempobra - Forecasting Redefined</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        header {
+            background-color: #ffffff;
+            padding: 20px 0;
+            border-bottom: 2px solid #f1f1f1;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo img {
+            height: 40px;
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0a3d62;
+        }
+
+        .nav-links ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links ul li a {
+            text-decoration: none;
+            color: #0a3d62;
+            font-size: 16px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links ul li a:hover {
+            color: #3498db;
+        }
+
+        .cta-buttons .cta {
+            background-color: #0a3d62;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-buttons .cta:hover {
+            background-color: #3498db;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: #e3f2fd;
+            padding: 160px 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-5px);
+        }
+
+        /* Features Section */
+        .features {
+            display: flex;
+            justify-content: space-between;
+            padding: 80px 20px;
+            background-color: #ffffff;
+        }
+
+        .feature-card {
+            background-color: #f1f8ff;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            width: 30%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background-color: #dfefff;
+        }
+
+        .feature-icon {
+            font-size: 60px;
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #0a3d62;
+        }
+
+        .feature-card p {
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        /* Customer Story Section */
+        .customer-story {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 100px 20px;
+            background-color: #f9f9f9;
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-container {
+            max-width: 500px;
+        }
+
+        .text-container h4 {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .text-container h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #0a3d62;
+        }
+
+        .text-container p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ffffff;
+            color: #333;
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 2px solid #f1f1f1;
+        }
+
+        footer p {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="./Images/logo.png" alt="Tempobra Logo">
+                <span class="logo-text">Tempobra</span>
+            </div>
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="weather.html">Weather</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+            <div class="cta-buttons">
+                <a href="login.html" class="cta">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Experience the Future of Weather</h1>
+            <p>Tempobra provides the most accurate forecasts and power outage alerts.</p>
+            <a href="weather.html" class="cta-button">Explore Weather</a>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <span class="material-icons feature-icon">cloud</span>
+            <h3>Precise Forecasts</h3>
+            <p>Get accurate and detailed weather updates for your location.</p>
+        </div>
+        <div class="feature-card">
+            <span class="material-icons feature-icon">bolt</span>
+            <h3>Outage Warnings</h3>
+            <p>Receive timely alerts on potential power disruptions.</p>
+        </div>
+        <div class="feature-card">
+            <span class="material-icons feature-icon">location_on</span>
+            <h3>Custom Locations</h3>
+            <p>Set preferred cities to receive personalized weather alerts.</p>
+        </div>
+    </section>
+
+    <section class="customer-story">
+        <div class="image-container">
+            <img src="./Images/customer.jpg" alt="Happy customer">
+        </div>
+        <div class="text-container">
+            <h4>Real Stories</h4>
+            <h2>"Tempobra kept us safe during the storm!"</h2>
+            <p>Thanks to real-time alerts, we were prepared for severe weather conditions and potential power outages.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Tempobra - All Rights Reserved</p>
+    </footer>
+</body>
+
+</html>
