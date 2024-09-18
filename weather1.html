@@ -1,415 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <title>Clima</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Tempobra - Precise Climate Insights</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <!-- Header -->
     <header>
         <div class="navbar">
             <div class="logo">
-                <img src="images/logo.png" alt="Tempobra Logo">
+                <img src="./Images/logo.png" alt="Tempobra Logo">
+                <span class="logo-text">Tempobra</span>
             </div>
             <nav class="nav-links">
                 <ul>
-                    <li><a href="index.html">Inicio</a></li>
-                    <li><a href="weather.html">Clima</a></li>
-                    <li><a href="news.html">Noticias</a></li>
-                    <li><a href="about.html">Sobre</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="weather.html">Weather</a></li>
+                    <li><a href="about.html">About</a></li>
                 </ul>
             </nav>
             <div class="cta-buttons">
-                <a href="#" class="cta">Membro+</a>
-                <a href="login.html" class="cta">Login</a>
+                <a href="login.html" class="cta"><span class="material-icons">login</span> Login</a>
             </div>
-        </div>      
+        </div>
     </header>
+
+    <!-- Hero Section -->
     <section class="hero-section">
-        <div class="content">
-            <h1>Dados meteorológicos</h1>
-            <p>Este é o hub central para tomar decisões rápidas e informadas, minimizando riscos e otimizando suas operações com base em dados climáticos de alta precisão.</p>
+        <div class="hero-content">
+            <h1>Precision Weather, Smarter Decisions</h1>
+            <p>Accurate data for agricultural planning, fleet management, or industrial operations, ensuring informed decision-making and efficiency.</p>
+            <a href="weather.html" class="cta-button">Explore Our Solution</a>
         </div>
     </section>
 
-    <!-- Seção de Clima -->
-    <section class="weather-section">
-        <div class="weather-container">
-            <div id="weather-info" class="weather-info">
-                <p>Carregando dados...</p>
-            </div>
-            <div id="other-cities" class="other-cities">
-                <p>Carregando outras cidades...</p>
-            </div>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="feature-card">
+            <span class="material-icons feature-icon">storm</span>
+            <h3>Severe Weather Alerts</h3>
+            <p>Get real-time alerts for extreme weather conditions, minimizing risks to your operations.</p>
+        </div>
+        <div class="feature-card">
+            <span class="material-icons feature-icon">wb_sunny</span>
+            <h3>Accurate Forecasting</h3>
+            <p>Our advanced models ensure that you stay ahead of the weather with precise predictions.</p>
+        </div>
+        <div class="feature-card">
+            <span class="material-icons feature-icon">eco</span>
+            <h3>Eco-Friendly Solutions</h3>
+            <p>Optimize energy consumption and reduce environmental impact with our insights.</p>
         </div>
     </section>
 
-    <script>
-        const weatherIcons = {
-            '01d': 'wb_sunny',
-            '01n': 'nights_stay',
-            '02d': 'wb_sunny',
-            '02n': 'nights_stay',
-            '03d': 'cloud',
-            '03n': 'cloud',
-            '04d': 'cloud',
-            '04n': 'cloud',
-            '09d': 'water_drop',
-            '09n': 'water_drop',
-            '10d': 'beach_access',
-            '10n': 'beach_access',
-            '11d': 'storm',
-            '11n': 'storm',
-            '13d': 'ac_unit',
-            '13n': 'ac_unit',
-            '50d': 'filter_drama',
-            '50n': 'filter_drama',
-            'sunset': 'wb_twilight'
-        };
-        
-        async function fetchWeather(city = 'São Paulo') {
-            const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Substitua com sua chave API
-            const weatherInfo = document.getElementById('weather-info');
-        
-            // Adiciona a classe de fade-out para iniciar a animação
-            weatherInfo.classList.add('fade-out');
-        
-            // Espera 0,5 segundos para a animação de fade-out terminar
-            setTimeout(async () => {
-                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
-                const data = await response.json();
-        
-                if (data.cod === 200) {
-                    const temp = Math.round(data.main.temp);
-                    const feelsLike = Math.round(data.main.feels_like);
-                    const tempMax = Math.round(data.main.temp_max);
-                    const tempMin = Math.round(data.main.temp_min);
-                    const weather = data.weather[0].description;
-                    const icon = data.weather[0].icon;
-                    const humidity = data.main.humidity;
-                    const windSpeed = data.wind.speed;
-                    const windDeg = data.wind.deg;
-                    const pressure = data.main.pressure;
-                    const clouds = data.clouds.all;
-                    const visibility = data.visibility / 1000; // Convertendo de metros para quilômetros
-                    const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString(); // Convertendo para horário local
-                    const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString(); // Convertendo para horário local
-                    const cityName = data.name;
-                    const uviResponse = await fetch(`https://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${data.coord.lat}&lon=${data.coord.lon}`);
-                    const uviData = await uviResponse.json();
-                    const uvIndex = uviData.value;
-        
-                    // Convertendo a direção do vento de graus para direção cardinal
-                    const directions = ['Norte', 'Nordeste', 'Leste', 'Sudeste', 'Sul', 'Sudoeste', 'Oeste', 'Noroeste'];
-                    const windDirection = directions[Math.round(windDeg / 45) % 8];
-        
-                    const iconName = weatherIcons[icon] || 'help_outline';
-                    weatherInfo.innerHTML = `
-                        <div class="weather-card">
-                            <div class="weather-left">
-                                <i class="material-icons weather-icon">${iconName}</i>
-                                <div class="weather-location">${cityName}</div>
-                                <div class="weather-temp">${temp}°C</div>
-                                <div class="weather-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
-                            </div>
-                            <div class="weather-right">
-                                <div class="weather-columns">
-                                    <div class="weather-column">
-                                        <div class="weather-detail">
-                                            <i class="material-icons">arrow_upward</i>
-                                            <span>Máx: ${tempMax}°C</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">arrow_downward</i>
-                                            <span>Mín: ${tempMin}°C</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">thermostat</i>
-                                            <span>Sensação: ${feelsLike}°C</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">opacity</i>
-                                            <span>Umidade: ${humidity}%</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">air</i>
-                                            <span>Vento: ${windSpeed} m/s ${windDirection}</span>
-                                        </div>
-                                    </div>
-                                    <div class="weather-column">
-                                        <div class="weather-detail">
-                                            <i class="material-icons">compress</i>
-                                            <span>Pressão: ${pressure} hPa</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">cloud</i>
-                                            <span>Nuvens: ${clouds}%</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">visibility</i>
-                                            <span>Visibilidade: ${visibility} km</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">wb_sunny</i>
-                                            <span>Índice UV: ${uvIndex}</span>
-                                        </div>
-                                        <div class="weather-detail">
-                                            <i class="material-icons">wb_twilight</i>
-                                            <span>Pôr do Sol: ${sunset}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-        
-                    // Remove a classe de fade-out para exibir as novas informações com uma animação de fade-in
-                    weatherInfo.classList.remove('fade-out');
-                } else {
-                    weatherInfo.innerHTML = `<p>Não foi possível carregar os dados climáticos.</p>`;
-                    weatherInfo.classList.remove('fade-out');
-                }
-            }, 500); // Tempo suficiente para que a animação de fade-out termine
-        }
-        
-        async function fetchOtherCitiesWeather() {
-            const apiKey = '6fb933c9f7d53edf247b458c25bdc881'; // Substitua com sua chave API
-            const cities = ['Rio de Janeiro', 'Belo Horizonte', 'Curitiba', 'Porto Alegre', 'Salvador']; // Lista de cidades
-            const otherCitiesContainer = document.getElementById('other-cities');
-            otherCitiesContainer.innerHTML = ''; // Limpa a seção
-        
-            for (const city of cities) {
-                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
-                const data = await response.json();
-        
-                if (data.cod === 200) {
-                    const temp = Math.round(data.main.temp);
-                    const weather = data.weather[0].description;
-                    const cityName = data.name;
-                    const icon = data.weather[0].icon;
-                    const iconName = weatherIcons[icon] || 'help_outline';
-        
-                    otherCitiesContainer.innerHTML += `
-                        <div class="other-city-card">
-                            <div class="other-city-info">
-                                <i class="material-icons other-city-icon">${iconName}</i>
-                                <div class="other-city-details">
-                                    <div class="other-city-name">${cityName}</div>
-                                    <div class="other-city-temp">${temp}°C</div>
-                                    <div class="other-city-desc">${weather.charAt(0).toUpperCase() + weather.slice(1)}</div>
-                                </div>
-                            </div>
-                            <button class="more-details-btn" onclick="fetchWeather('${cityName}')">Ver mais</button>
-                        </div>
-                    `;
-                }
-            }
-        }
-        
-        fetchWeather();
-        fetchOtherCitiesWeather();
-        </script>
-        
-    <style>
-/* Estilo da seção de clima */
-.weather-section {
-    padding: 15px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    max-width: 900px;
-    margin: auto;
+    <!-- Customer Story Section -->
+    <section class="customer-story">
+        <div class="image-container">
+            <img src="./Images/energy-sector.jpg" alt="Energy Sector">
+        </div>
+        <div class="text-container">
+            <h4>Solution for the Energy Sector</h4>
+            <h2>Optimize Time with Tempobra</h2>
+            <p>From wind forecasting to storm anticipation, we provide critical insights to minimize risks and maximize efficiency.</p>
+            <a href="weather.html" class="cta-button">Try Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Tempobra. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+<style>
+/* Fontes */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
 }
 
-.weather-container {
-    display: flex;
-    width: 100%;
+body {
+    color: #1b1b1b;
+    line-height: 1.6;
+    background-color: #f4f7fc;
 }
 
-.weather-info {
-    max-width: 450px;
-    width: 50%;
+/* Header */
+header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.other-cities {
-    width: 50%;
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.weather-card, .other-city-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.weather-card {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    width: 100%;
-    overflow: hidden;
-}
-
-.weather-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-right: 15px;
-}
-
-.weather-right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.weather-columns {
-    display: flex;
-    justify-content: space-between;
-}
-
-.weather-column {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.weather-location {
-    font-size: 16px;
-    font-weight: bold;
-    color: #0c1e2d;
-    margin-bottom: 6px;
-}
-
-.weather-icon {
-    font-size: 40px;
-    color: #0073e6;
-    margin-bottom: 6px;
-}
-
-.weather-temp {
-    font-size: 28px;
-    font-weight: bold;
-    color: #0c1e2d;
-    margin-bottom: 6px;
-}
-
-.weather-desc {
-    font-size: 12px;
-    color: #555;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
-.weather-detail {
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    color: #333;
-    margin: 4px 0;
-}
-
-.weather-detail i {
-    font-size: 18px;
-    color: #0073e6;
-    margin-right: 6px;
-}
-
-/* Estilo para outras cidades */
-.other-city-card {
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
 }
 
-.other-city-info {
+.logo {
     display: flex;
     align-items: center;
 }
 
-.other-city-icon {
-    font-size: 32px;
-    color: #0073e6;
+.logo img {
+    height: 40px;
     margin-right: 10px;
 }
 
-.other-city-details {
+.logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0c1e2d;
+}
+
+.nav-links ul {
+    list-style: none;
     display: flex;
-    flex-direction: column;
+    gap: 30px;
 }
 
-.other-city-name {
+.nav-links ul li a {
+    text-decoration: none;
+    color: #1b1b1b;
     font-size: 16px;
-    font-weight: bold;
-    color: #0c1e2d;
-    margin-bottom: 4px;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-.other-city-temp {
-    font-size: 20px;
-    font-weight: bold;
-    color: #0c1e2d;
-    margin-bottom: 4px;
+.nav-links ul li a:hover {
+    color: #0073e6;
 }
 
-.other-city-desc {
-    font-size: 12px;
-    color: #555;
-}
-
-/* Estilo para o botão - Animações Suaves ao Passar o Mouse Sobre os Botões*/
-.more-details-btn {
+.cta-buttons .cta {
     background-color: #0073e6;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
 }
 
-.more-details-btn:hover {
+.cta:hover {
     background-color: #005bb5;
-    transform: scale(1.05);
 }
-/* Estilo para as cartas de clima e outras cidades - Animação ao Passar o Mouse Sobre as Cartas de Clima  */
-.weather-card, .other-city-card {
-    background: white;
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 115, 230, 0.6), rgba(0, 115, 230, 0.9)), url('./Images/hero-background.jpg') center/cover no-repeat;
+    color: white;
+    padding: 120px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    background-color: #fff;
+    color: #0073e6;
+    padding: 15px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #005bb5;
+    color: #fff;
+}
+
+/* Features Section */
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 60px 20px;
+    background-color: #ffffff;
+}
+
+.feature-card {
+    background-color: #f0f5ff;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+    padding: 40px 20px;
+    text-align: center;
+    width: 30%;
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+
+.feature-icon {
+    font-size: 50px;
+    color: #0073e6;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    font-size: 1rem;
+    color: #4a4a4a;
+}
+
+/* Customer Story Section */
+.customer-story {
+    display: flex;
+    align-items: center;
+    padding: 60px 20px;
+    background-color: #f8f9fa;
+}
+
+.image-container img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.text-container h4 {
+    font-size: 1rem;
+    color: #a0a0a0;
     margin-bottom: 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.weather-card:hover, .other-city-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-/* Estilo da transição de fade-in */
-.weather-info {
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    opacity: 1;
-    transform: translateY(0);
+.text-container h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
-.weather-info.fade-out {
-    opacity: 0;
-    transform: translateY(-10px); /* Move o conteúdo para cima levemente */
+.text-container p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
 }
 
+/* Footer */
+footer {
+    background-color: #0c1e2d;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
 
-    </style>
-</body>
+footer p {
+    font-size: 0.9rem;
+}
+
+</style>
 </html>
