@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Define o charset para garantir a correta codificação de caracteres -->
     <meta charset="UTF-8">
-    <!-- Configura a viewport para garantir que o site seja responsivo e se ajuste a diferentes tamanhos de tela -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Inclui o arquivo CSS principal para estilização -->
     <link rel="stylesheet" href="style.css">
-    <!-- Inclui ícones do Material Icons, uma biblioteca popular de ícones -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Clima</title>
 </head>
@@ -27,13 +23,12 @@
                     <li><a href="about.html">Sobre</a></li>
                 </ul>
             </nav>
-            <!-- Botões de chamada para ação, como "Membro+" e "Login" -->
             <div class="cta-buttons">
                 <a href="login.html" class="cta">Login</a>
             </div>
         </div>      
     </header>
-    <!-- Seção hero do site com uma introdução principal -->
+    <!--  introdução principal -->
     <section class="hero-section">
         <div class="content">
             <h1>Dados meteorológicos</h1>
@@ -76,7 +71,7 @@
     <!-- Seção de Clima -->
     <section class="weather-section">
         <div class="weather-container">
-            <!-- Campo de pesquisa de cidade com sugestões dinâmicas -->
+            <!-- Campo de pesquisa de cidade com sugestões -->
             <div class="search-container">
                 <input type="text" id="city-search" placeholder="Pesquise uma cidade..." oninput="searchCity()" />
                 <div id="suggestions" class="suggestions"></div>
@@ -85,7 +80,7 @@
             <div id="weather-info" class="weather-info">
                 <p>Carregando dados...</p>
             </div>
-             <!-- Filtros Dinâmicos -->
+             <!-- Filtros -->
         <div id="filter-container" class="filter-container">
             <div class="filter-group">
                 <input type="checkbox" id="filter-temperature" checked>
@@ -230,7 +225,7 @@ window.onclick = function(event) {
 
 // Captura o evento de submissão do formulário
 outageReportForm.addEventListener('submit', async function(event) {
-  event.preventDefault(); // Previne o comportamento padrão do formulário
+  event.preventDefault(); 
 
   // Coleta os dados do formulário
   const outageLocation = document.getElementById('outageLocation').value;
