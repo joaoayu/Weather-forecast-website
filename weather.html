@@ -61,12 +61,32 @@
     <div class="modal-content">
         <span class="close" onclick="closeInfo()">&times;</span>
         <h3>O que é o Temai</h3>
-        <p>O Temai é um chatbot em desenvolvimento no qual você pode obter respostas simples, porém mais rápidas, sobre os locais que deseja pesquisar.<br><br>
+        <p>O Temai é uma IA em desenvolvimento, nela você pode obter respostas precisas e rápidas sobre as localidades que deseja pesquisar.<br><br>
            <h3>Como fazer perguntas ao Temai</h3>
-           Digite a cidade no campo abaixo e clique em "Enviar".<br><br> Por exemplo, você pode digitar:<br> - Qual o clima em São Paulo?<br> - Esta frio em São Paulo?<br> - Hoje vai chover em São Paulo?<br><br>Sinta-se livre para realizar perguntas ao Temai.<br><br><i>Versão: 2.0.0 (acesso antecipado)</i></p>
+           Digite a cidade no campo abaixo e clique em "Enviar".<br><br> Por exemplo, você pode digitar:<br> - Qual o clima em São Paulo?<br> - Esta frio em São Paulo?<br> - Hoje vai chover em São Paulo?<br><br>Sinta-se livre para realizar perguntas ao Temai.<br><br><i>Versão: 2.0.0 (acesso antecipado)</i></p><br>
+            <!-- Link para exibir o histórico de versões -->
+        <p id="show-history" onclick="toggleHistory()">Histórico de Versão</p>
+
+        <!-- Histórico de versões escondido inicialmente -->
+        <div id="version-history">
+            <h4>Histórico de Atualizações do Temai</h4><br>
+                <strong class="temai-gradient">Versão 2.0.0</strong> - Acesso antecipado com melhorias no Temai e na sua performance, feita a reestruturação total do Temai.<br>Adicionado conceitos de RAG ao modelo, tornando-o capaz de reconhecer perguntas complexas, removendo o conhecimento básico em entender apenas quando o usuário digitava o nome da localização.<br>
+                <strong>Versão 1.1.0</strong> - Redesign do Temai<br>
+                <strong>Versão 1.0.0</strong> - Lançamento inicial do Temai como Chatbot
+        </div>
     </div>
 </div>
-
+<script>
+     // Função para mostrar/esconder o histórico de versões
+     function toggleHistory() {
+        var history = document.getElementById("version-history");
+        if (history.style.display === "none" || history.style.display === "") {
+            history.style.display = "block";
+        } else {
+            history.style.display = "none";
+        }
+    }
+</script>
 
     <!-- Seção de Clima -->
     <section class="weather-section">
