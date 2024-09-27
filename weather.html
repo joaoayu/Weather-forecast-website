@@ -140,6 +140,107 @@
             </div>
             <button id="apply-filters" class="more-details-btn">Aplicar filtros</button>
         </div>
+        <button class="more-details-btn" id="show-plot">Exibir Gráfico</button>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <div id="weather-plot-container" style="display: none;">
+            <div id="weather-plot" style="width: 100%; height: 400px;"></div>
+        </div>
+    
+        
+        
+        <script>
+document.getElementById('show-plot').addEventListener('click', function() {
+    const plotContainer = document.getElementById('weather-plot-container');
+
+    // Alterna entre mostrar e esconder o gráfico
+    if (plotContainer.style.display === 'none' || plotContainer.style.display === '') {
+        plotContainer.style.display = 'block';
+
+        // Redesenha o gráfico caso ele já tenha sido criado
+        Plotly.Plots.resize(document.getElementById('weather-plot'));
+
+        // Verifica se o gráfico já foi criado para não recriar sempre
+        if (!plotContainer.dataset.plotCreated) {
+            generateWeatherPlot(forecastData);  // Gera o gráfico quando for exibido pela primeira vez
+            plotContainer.dataset.plotCreated = true;  // Marcar que o gráfico foi criado
+        } else {
+            // Redesenha o gráfico caso já tenha sido criado
+            Plotly.Plots.resize(document.getElementById('weather-plot'));
+        }
+
+        this.textContent = 'Ocultar Gráfico';  // Muda o texto do botão
+    } else {
+        plotContainer.style.display = 'none';
+        this.textContent = 'Visualizar Gráfico';  // Volta o texto para "Visualizar Gráfico"
+    }
+});
+
+
+// Função para gerar o gráfico com Plotly
+function generateWeatherPlot(forecastData) {
+    const labels = forecastData.map(item => {
+        const date = new Date(item.dt * 1000);
+        return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    });
+
+    const temperatures = forecastData.map(item => item.main.temp);
+    const humidity = forecastData.map(item => item.main.humidity);
+    const windSpeed = forecastData.map(item => item.wind.speed);
+
+    // Criação dos traces para cada variável climática, exceto pressão
+    const tempTrace = {
+        x: labels,
+        y: temperatures,
+        mode: 'lines+markers',
+        name: 'Temperatura (°C)',
+        line: { color: 'red' },
+        marker: { size: 8 }
+    };
+
+    const humidityTrace = {
+        x: labels,
+        y: humidity,
+        mode: 'lines+markers',
+        name: 'Umidade (%)',
+        line: { color: 'blue' },
+        marker: { size: 8 }
+    };
+
+    const windTrace = {
+        x: labels,
+        y: windSpeed,
+        mode: 'lines+markers',
+        name: 'Velocidade do Vento (m/s)',
+        line: { color: 'purple' },
+        marker: { size: 8 }
+    };
+
+    const data = [tempTrace, humidityTrace, windTrace]; // Remove pressureTrace
+
+    // Layout personalizado para o gráfico
+    const layout = {
+        xaxis: {
+            tickformat: '%H:%M',
+        },
+        yaxis: {
+            autorange: true,
+            title: 'Valores',
+        },
+        autosize: true,
+        responsive: true,  // Torna o gráfico responsivo
+        margin: { t: 50, b: 40, l: 50, r: 10 },
+        legend: { orientation: 'h' },
+    };
+
+    // Renderizar o gráfico no div 'weather-plot'
+    Plotly.newPlot('weather-plot', data, layout);
+
+    // Garantir que o gráfico será redimensionado corretamente
+    window.addEventListener('resize', function() {
+        Plotly.Plots.resize(document.getElementById('weather-plot'));
+    });
+}
+        </script>
             <!-- Seção de Alertas Meteorológicos -->
             <section class="alerts-section">
                 <div class="alerts-container">
@@ -527,6 +628,11 @@ async function fetchWeather(city = 'São Paulo') {
             const forecastResponse = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=pt_br`);
             const forecastData = await forecastResponse.json();
             const pop = forecastData.list[0].pop || 0;
+             // Pegar as primeiras 8 previsões (equivalente às próximas 24 horas, pois cada previsão é a cada 3h)
+             const forecastList = forecastData.list.slice(0, 8);
+
+// Chamar a função para gerar o gráfico usando Plotly
+generateWeatherPlot(forecastList);
 
             const directions = ['Norte', 'Nordeste', 'Leste', 'Sudeste', 'Sul', 'Sudoeste', 'Oeste', 'Noroeste'];
             const windDirection = directions[Math.round(windDeg / 45) % 8];
@@ -1151,6 +1257,11 @@ button[type="submit"]:active {
         width: 100%;
     }
 }
+#weather-plot-container {
+    margin-top: 20px; /* Espaço entre o botão e o gráfico */
+}
+
+
 
 /* Estilo para a caixa de filtros */
 .filter-container {
